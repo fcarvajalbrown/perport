@@ -357,6 +357,18 @@ function openModal(repo) {
         homepageBtn.classList.add('hidden');
     }
 
+    const readmeContainer = document.getElementById('modal-readme');
+    const readmeContent = document.getElementById('modal-readme-content');
+    readmeContainer.classList.add('hidden');
+    readmeContent.textContent = 'Loading README...';
+
+    fetchReadme(repo.owner.login, repo.name).then(text => {
+        if (text) {
+            readmeContent.textContent = text;
+            readmeContainer.classList.remove('hidden');
+        }
+    });
+
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 }
@@ -364,6 +376,33 @@ function openModal(repo) {
 function closeModal() {
     modal.classList.remove('open');
     document.body.style.overflow = '';
+}
+
+function decodeBase64(str) {
+    try {
+        const clean = str.replace(/\s/g, '');
+        return decodeURIComponent(escape(atob(clean)));
+    } catch {
+        return atob(str.replace(/\s/g, ''));
+    }
+}
+
+async function fetchReadme(owner, repo) {
+    const cacheKey = `readme_${owner}_${repo}`;
+    const cached = cacheGet(cacheKey);
+    if (cached) return cached;
+
+    try {
+        const res = await fetchWithTimeout(`https://api.github.com/repos/${owner}/${repo}/readme`);
+        if (res.status === 404) return null;
+        if (!res.ok) throw new Error(`status ${res.status}`);
+        const data = await res.json();
+        const text = data.content ? decodeBase64(data.content) : null;
+        if (text) cacheSet(cacheKey, text);
+        return text;
+    } catch {
+        return null;
+    }
 }
 
 // Escape HTML to prevent XSS

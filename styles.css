@@ -522,6 +522,51 @@ body {
     display: none !important;
 }
 
+/* ===== Modal README ===== */
+.modal-readme {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.readme-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.readme-content {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.readme-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.readme-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.readme-content::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 3px;
+}
+
 /* ===== Footer ===== */
 footer {
     text-align: center;
