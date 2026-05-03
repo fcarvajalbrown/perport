@@ -1,10 +1,11 @@
 const GITHUB_USER = 'fcarvajalbrown';
 const REPOS_PER_PAGE = 12;
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
+const CACHE_VERSION = 'v2';
 
 function cacheGet(key) {
     try {
-        const raw = localStorage.getItem(`gh_${key}`);
+        const raw = localStorage.getItem(`gh_${CACHE_VERSION}_${key}`);
         if (!raw) return null;
         const { ts, data } = JSON.parse(raw);
         if (Date.now() - ts > CACHE_TTL_MS) {
@@ -19,7 +20,7 @@ function cacheGet(key) {
 
 function cacheSet(key, data) {
     try {
-        localStorage.setItem(`gh_${key}`, JSON.stringify({ ts: Date.now(), data }));
+        localStorage.setItem(`gh_${CACHE_VERSION}_${key}`, JSON.stringify({ ts: Date.now(), data }));
     } catch {
         // storage full or disabled
     }
