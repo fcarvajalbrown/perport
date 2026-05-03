@@ -361,11 +361,11 @@ function openModal(repo) {
     const readmeContainer = document.getElementById('modal-readme');
     const readmeContent = document.getElementById('modal-readme-content');
     readmeContainer.classList.add('hidden');
-    readmeContent.textContent = 'Loading README...';
+    readmeContent.innerHTML = '<p class="readme-loading">Loading README...</p>';
 
     fetchReadme(repo.owner.login, repo.name).then(text => {
         if (text) {
-            readmeContent.textContent = text;
+            readmeContent.innerHTML = window.marked.parse(text, { breaks: true, gfm: true });
             readmeContainer.classList.remove('hidden');
         }
     });
