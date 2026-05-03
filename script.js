@@ -165,11 +165,11 @@ function createRepoCard(repo, index) {
         const centerY = rect.height / 2;
         const rotateX = ((y - centerY) / centerY) * -4;
         const rotateY = ((x - centerX) / centerX) * 4;
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
     });
 
     card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+        card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
     });
 
     card.addEventListener('click', () => openModal(repo));
