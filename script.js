@@ -291,7 +291,7 @@ async function loadMoreRepos() {
             return;
         }
 
-        const filteredRepos = repos.filter(r => r.name.toLowerCase() !== 'portrepo' && !r.fork);
+        const filteredRepos = repos.filter(r => r.name.toLowerCase() !== 'perport' && !r.fork);
         allRepos.push(...filteredRepos);
         renderNextBatch();
         currentPage++;
