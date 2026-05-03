@@ -126,7 +126,7 @@ async function fetchProfile() {
         return;
     }
     try {
-        const res = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
+        const res = await fetchWithTimeout(`https://api.github.com/users/${GITHUB_USER}`);
         if (!res.ok) {
             if (res.status === 403) throw new Error('Rate limited by GitHub API (status 403)');
             const body = await res.text();
@@ -177,7 +177,7 @@ async function fetchReposPage(page) {
     if (cached) return cached;
 
     const url = `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=${REPOS_PER_PAGE}&page=${page}`;
-    const res = await fetch(url);
+    const res = await fetchWithTimeout(url);
     if (!res.ok) {
         const body = await res.text();
         throw new Error(`Failed to load repos (status ${res.status}): ${body}`);
@@ -383,8 +383,26 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Init
-fetchProfile();
-// Load first page immediately so repos appear without scrolling
-loadMoreRepos();
-observer.observe(sentinel);
+function fetchWithTimeout(url, opts = {}, ms = 8000) {
+    return Promise.race([
+        fetch(url, opts),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Request timed out')), ms)
+        )
+    ]);
+}
+
+// Clear any old corrupted cache from before this version
+(function clearOldCache() {
+    try {
+        const keys = Object.keys(localStorage).filter(k => k.startsWith('gh_'));
+        keys.forEach(k => localStorage.removeItem(k));
+    } catch { /* ignore */ }
+})();
+
+// Init after DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    fetchProfile();
+    loadMoreRepos();
+    observer.observe(sentinel);
+});
