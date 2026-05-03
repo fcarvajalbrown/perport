@@ -1,5 +1,29 @@
 const GITHUB_USER = 'fcarvajalbrown';
 const REPOS_PER_PAGE = 12;
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+function cacheGet(key) {
+    try {
+        const raw = localStorage.getItem(`gh_${key}`);
+        if (!raw) return null;
+        const { ts, data } = JSON.parse(raw);
+        if (Date.now() - ts > CACHE_TTL_MS) {
+            localStorage.removeItem(`gh_${key}`);
+            return null;
+        }
+        return data;
+    } catch {
+        return null;
+    }
+}
+
+function cacheSet(key, data) {
+    try {
+        localStorage.setItem(`gh_${key}`, JSON.stringify({ ts: Date.now(), data }));
+    } catch {
+        // storage full or disabled
+    }
+}
 
 const languageColors = {
     JavaScript: '#f1e05a',
@@ -96,30 +120,71 @@ function timeAgo(dateString) {
 }
 
 async function fetchProfile() {
+    const cached = cacheGet('profile');
+    if (cached) {
+        renderProfile(cached);
+        return;
+    }
     try {
         const res = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
-        if (!res.ok) throw new Error('Failed to load profile');
+        if (!res.ok) {
+            if (res.status === 403) throw new Error('Rate limited by GitHub API (status 403)');
+            const body = await res.text();
+            throw new Error(`Failed to load profile (status ${res.status}): ${body}`);
+        }
         const data = await res.json();
+        cacheSet('profile', data);
+        renderProfile(data);
 
-        document.getElementById('avatar-img').src = data.avatar_url;
-        document.getElementById('name').textContent = data.name || data.login;
-        document.getElementById('bio').textContent = data.bio || `GitHub user @${data.login}`;
-        document.getElementById('stat-repos').textContent = data.public_repos;
-        document.getElementById('stat-followers').textContent = data.followers;
-        document.getElementById('stat-following').textContent = data.following;
     } catch (err) {
         console.error(err);
+        const avatar = document.getElementById('avatar-img');
+        avatar.src = `https://github.com/${GITHUB_USER}.png`;
+        avatar.onerror = null;
         document.getElementById('name').textContent = GITHUB_USER;
         document.getElementById('bio').textContent = 'Portfolio';
+
+        // Show a helpful error above the repos grid with exact API message/status
+        const reposGrid = document.getElementById('repos-grid');
+        const existing = reposGrid.querySelector('.error');
+        const message = err && err.message ? err.message : 'Unknown error';
+        if (!existing) {
+            const errDiv = document.createElement('div');
+            errDiv.className = 'error';
+            errDiv.innerHTML = `<strong>Profile load error:</strong> ${escapeHtml(message)}`;
+            reposGrid.prepend(errDiv);
+        } else {
+            existing.innerHTML = `<strong>Profile load error:</strong> ${escapeHtml(message)}`;
+        }
     }
 }
 
+function renderProfile(data) {
+    const avatar = document.getElementById('avatar-img');
+    avatar.src = data.avatar_url || `https://github.com/${GITHUB_USER}.png`;
+    avatar.onerror = () => { avatar.src = `https://github.com/${GITHUB_USER}.png`; };
+
+    document.getElementById('name').textContent = data.name || data.login;
+    document.getElementById('bio').textContent = data.bio || `GitHub user @${data.login}`;
+    document.getElementById('stat-repos').textContent = data.public_repos;
+    document.getElementById('stat-followers').textContent = data.followers;
+    document.getElementById('stat-following').textContent = data.following;
+}
+
 async function fetchReposPage(page) {
-    const res = await fetch(
-        `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=${REPOS_PER_PAGE}&page=${page}&type=public`
-    );
-    if (!res.ok) throw new Error('Failed to load repos');
-    return await res.json();
+    const cacheKey = `repos_page_${page}`;
+    const cached = cacheGet(cacheKey);
+    if (cached) return cached;
+
+    const url = `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=${REPOS_PER_PAGE}&page=${page}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`Failed to load repos (status ${res.status}): ${body}`);
+    }
+    const data = await res.json();
+    cacheSet(cacheKey, data);
+    return data;
 }
 
 function createRepoCard(repo, index) {
@@ -233,8 +298,18 @@ async function loadMoreRepos() {
     } catch (err) {
         console.error(err);
         hideSentinelLoading();
+        const message = err && err.message ? err.message : 'Unknown error';
         if (displayedCount === 0) {
-            reposGrid.innerHTML = `<div class="error">Unable to load repositories.<br>Please try again later.</div>`;
+            reposGrid.innerHTML = `<div class="error"><strong>Unable to load repositories:</strong><br>${escapeHtml(message)}<br>Please try again later.</div>`;
+        } else {
+            // Non-blocking error banner
+            let existing = reposGrid.querySelector('.error');
+            if (!existing) {
+                existing = document.createElement('div');
+                existing.className = 'error';
+                reposGrid.prepend(existing);
+            }
+            existing.innerHTML = `<strong>Repository load error:</strong> ${escapeHtml(message)}`;
         }
         observer.disconnect();
     } finally {
@@ -310,4 +385,6 @@ document.addEventListener('keydown', (e) => {
 
 // Init
 fetchProfile();
+// Load first page immediately so repos appear without scrolling
+loadMoreRepos();
 observer.observe(sentinel);
