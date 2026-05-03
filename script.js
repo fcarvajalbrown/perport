@@ -291,7 +291,8 @@ async function loadMoreRepos() {
             return;
         }
 
-        allRepos.push(...repos);
+        const filteredRepos = repos.filter(r => r.name.toLowerCase() !== 'portrepo' && !r.fork);
+        allRepos.push(...filteredRepos);
         renderNextBatch();
         currentPage++;
         hideSentinelLoading();
@@ -381,9 +382,14 @@ function closeModal() {
 function decodeBase64(str) {
     try {
         const clean = str.replace(/\s/g, '');
-        return decodeURIComponent(escape(atob(clean)));
+        const binary = atob(clean);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
     } catch {
-        return atob(str.replace(/\s/g, ''));
+        return null;
     }
 }
 
@@ -430,14 +436,6 @@ function fetchWithTimeout(url, opts = {}, ms = 8000) {
         )
     ]);
 }
-
-// Clear any old corrupted cache from before this version
-(function clearOldCache() {
-    try {
-        const keys = Object.keys(localStorage).filter(k => k.startsWith('gh_'));
-        keys.forEach(k => localStorage.removeItem(k));
-    } catch { /* ignore */ }
-})();
 
 // Init after DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
