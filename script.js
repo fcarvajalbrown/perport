@@ -1,6 +1,6 @@
 const GITHUB_USER = 'fcarvajalbrown';
 const REPOS_PER_PAGE = 12;
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
 
 function cacheGet(key) {
     try {
