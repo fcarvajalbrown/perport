@@ -9,6 +9,11 @@
 
 - **NEVER use emojis** — not in code, comments, docs, commit messages, CLI output, or agent responses.
 
+## Lessons Learned
+
+- **Do not assume repository or project names from the local directory.** The folder name on disk may differ from the actual GitHub repository name. Always confirm the correct remote identifier with the user before writing filters, URLs, or references.
+- **Verify values against live sources when possible.** If a user mentions a GitHub repo name, use that exact name rather than inferring from the filesystem.
+
 ## File Creation Policy
 
 **This is enforced for all agents working on this project:**
