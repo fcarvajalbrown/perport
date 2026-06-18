@@ -30,8 +30,11 @@ jobs:
           set -euo pipefail
           ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           gh api "users/${GH_USER}" > profile.json
+          # Exclude forks and the perport repo itself (the client hides them anyway).
+          # Keeping perport out is critical: this workflow pushes to perport, which
+          # bumps its own updated_at, which would otherwise make every run "change".
           gh api "users/${GH_USER}/repos?sort=updated&per_page=100" --paginate \
-            | jq -s 'add' > repos.json
+            | jq -s 'add | map(select(.fork == false and (.name | ascii_downcase) != "perport"))' > repos.json
           jq -n \
             --slurpfile p profile.json \
             --slurpfile r repos.json \
@@ -47,14 +50,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Skip the commit unless profile/repos actually changed. data.json carries
           # a generated_at timestamp that changes every run, so compare it stripped.
-          if git show HEAD:data.json > old.json 2>/dev/null \
-             && diff -q <(jq -S 'del(.generated_at)' old.json) \
-                        <(jq -S 'del(.generated_at)' data.json) >/dev/null; then
-            echo "No substantive changes; skipping commit."
-            rm -f old.json
-            exit 0
+          if git show HEAD:data.json > old.json 2>/dev/null; then
+            jq -S 'del(.generated_at)' old.json  > old.norm.json
+            jq -S 'del(.generated_at)' data.json > new.norm.json
+            if cmp -s old.norm.json new.norm.json; then
+              echo "No substantive changes; skipping commit."
+              rm -f old.json old.norm.json new.norm.json
+              exit 0
+            fi
           fi
-          rm -f old.json
+          rm -f old.json old.norm.json new.norm.json
           git add data.json
           git commit -m "chore: refresh GitHub data snapshot"
           # master may move under us (an outside push lands mid-run). Rebase on the
