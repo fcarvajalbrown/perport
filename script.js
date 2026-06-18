@@ -88,6 +88,8 @@ let allRepos = [];
 let displayedCount = 0;
 let isLoading = false;
 let currentPage = 1;
+let snapshot = null;
+let usingSnapshot = false;
 
 const reposGrid = document.getElementById('repos-grid');
 const sentinel = document.getElementById('sentinel');
@@ -322,7 +324,12 @@ async function loadMoreRepos() {
 // Infinite scroll observer
 const observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
-        loadMoreRepos();
+        if (usingSnapshot) {
+            // All repos are already in memory from the snapshot; just reveal more.
+            if (!renderNextBatch()) observer.disconnect();
+        } else {
+            loadMoreRepos();
+        }
     }
 }, { rootMargin: '200px' });
 
@@ -438,9 +445,40 @@ function fetchWithTimeout(url, opts = {}, ms = 8000) {
     ]);
 }
 
-// Init after DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    fetchProfile();
-    loadMoreRepos();
-    observer.observe(sentinel);
+// Load the pre-built snapshot committed by the refresh workflow. Cache-busted and
+// no-store so the browser always sees the latest committed data.json.
+async function loadSnapshot() {
+    try {
+        const res = await fetchWithTimeout(`data.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) return false;
+        const data = await res.json();
+        if (!data || !data.profile || !Array.isArray(data.repos)) return false;
+        snapshot = data;
+        usingSnapshot = true;
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+// Init after DOM is ready. Prefer the data.json snapshot; fall back to live
+// GitHub API calls when it isn't present (local dev, or before the first run).
+document.addEventListener('DOMContentLoaded', async () => {
+    const hasSnapshot = await loadSnapshot();
+    if (hasSnapshot) {
+        renderProfile(snapshot.profile);
+        allRepos = snapshot.repos.filter(r => r.name.toLowerCase() !== 'perport' && !r.fork);
+        const loading = reposGrid.querySelector('.loading');
+        if (loading) loading.remove();
+        if (allRepos.length === 0) {
+            reposGrid.innerHTML = '<div class="empty">No public repositories found.</div>';
+            return;
+        }
+        renderNextBatch();
+        observer.observe(sentinel);
+    } else {
+        fetchProfile();
+        loadMoreRepos();
+        observer.observe(sentinel);
+    }
 });

@@ -1,0 +1,54 @@
+name: Refresh GitHub data
+
+# Snapshots the portfolio owner's profile and repositories into data.json so the
+# site serves pre-fetched data instead of hitting the GitHub API from each
+# visitor's browser. Runs on a schedule and can be triggered manually.
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_USER: fcarvajalbrown
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build data.json snapshot
+        run: |
+          set -euo pipefail
+          ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          gh api "users/${GH_USER}" > profile.json
+          gh api "users/${GH_USER}/repos?sort=updated&per_page=100" --paginate \
+            | jq -s 'add' > repos.json
+          jq -n \
+            --slurpfile p profile.json \
+            --slurpfile r repos.json \
+            --arg ts "$ts" \
+            '{generated_at: $ts, profile: $p[0], repos: $r[0]}' > data.json
+          rm -f profile.json repos.json
+          echo "Snapshot repos: $(jq '.repos | length' data.json)"
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: refresh GitHub data snapshot"
+            git push
+          fi
