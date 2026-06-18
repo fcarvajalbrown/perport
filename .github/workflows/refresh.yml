@@ -23,7 +23,7 @@ jobs:
       GH_USER: fcarvajalbrown
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build data.json snapshot
         run: |
@@ -48,7 +48,18 @@ jobs:
           git add data.json
           if git diff --staged --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "chore: refresh GitHub data snapshot"
-            git push
+            exit 0
           fi
+          git commit -m "chore: refresh GitHub data snapshot"
+          # master may move under us (an outside push lands mid-run). Rebase on the
+          # latest remote and retry rather than failing with a non-fast-forward.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:master; then
+              echo "Pushed on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing on latest master..."
+            git pull --rebase --autostash origin master
+          done
+          echo "Failed to push after 5 attempts." >&2
+          exit 1
