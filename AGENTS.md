@@ -1,9 +1,6 @@
-## Testing Standards
+## Project Type
 
-- `go test ./...` must pass before any commit.
-- Every schema change needs a corresponding test fixture (valid and invalid examples).
-- Cache and checkpoint tests must verify crash recovery.
-- **Never modify a test to make it pass.** If a test fails, fix the root cause in the production code first. Only update the test itself if the test is genuinely wrong (wrong expectation, stale contract). When in doubt, ask.
+This is a static, dependency-free portfolio site (`index.html`, `styles.css`, `script.js`) deployed via GitHub Pages. There is no build step and no test suite. The GitHub data shown on the site is snapshotted into `data.json` by the `.github/workflows/refresh.yml` workflow; see `CLAUDE.md` for the architecture.
 
 ## Communication Rules
 
