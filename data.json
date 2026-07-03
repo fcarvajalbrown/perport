@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T13:46:01Z",
+  "generated_at": "2026-07-03T19:05:32Z",
   "profile": {
     "login": "fcarvajalbrown",
     "id": 110441487,
@@ -111,7 +111,7 @@
       "clone_url": "https://github.com/fcarvajalbrown/PS-Chile-Estatutos-App.git",
       "svn_url": "https://github.com/fcarvajalbrown/PS-Chile-Estatutos-App",
       "homepage": null,
-      "size": 701,
+      "size": 876,
       "stargazers_count": 0,
       "watchers_count": 0,
       "language": "HTML",
@@ -119,7 +119,7 @@
       "has_projects": true,
       "has_downloads": true,
       "has_wiki": true,
-      "has_pages": false,
+      "has_pages": true,
       "has_discussions": false,
       "forks_count": 0,
       "mirror_url": null,
