@@ -1,6 +1,6 @@
 ## Project Type
 
-This is a static, dependency-free portfolio site (`index.html`, `styles.css`, `script.js`) deployed via GitHub Pages. There is no build step and no test suite. The GitHub data shown on the site is snapshotted into `data.json` by the `.github/workflows/refresh.yml` workflow; see `CLAUDE.md` for the architecture.
+This is a static, dependency-free portfolio site (`index.html`, `styles.css`, `script.js`) deployed primarily on Hostinger (via hPanel Git deploy), with a GitHub Pages deployment kept as a backup. There is no build step and no test suite. The GitHub data shown on the site is snapshotted into `data.json` by `refresh.php`, run on a schedule by an hPanel cron job; see `CLAUDE.md` for the architecture and `docs/hostinger-setup.md` for the one-time hPanel setup.
 
 ## Communication Rules
 
