@@ -23,6 +23,8 @@ Confirmed available on the Business tier (sources in the setup runbook):
 - **Outbound HTTPS** (port 443 open) to `api.github.com`; no block observed.
 - Static serving of HTML/CSS/JS from `public_html`.
 - hPanel **Git deploy** (Advanced > Git): pull a GitHub repo into `public_html`.
+- **SSH** available on Business (jailed to home dir, port 65002) — for placing the
+  token config file above the web root.
 
 Not usable for this: **Node.js** on shared Business is a managed app-deploy
 feature, not a cron-callable runtime. So the refresh is written in **PHP**.
@@ -40,11 +42,16 @@ feature, not a cron-callable runtime. So the refresh is written in **PHP**.
 
 ### Data refresh decisions (as agreed)
 
-- **Unauthenticated GitHub API.** A 6-hourly portfolio refresh is ~3 requests per
-  run, far below any limit, so no Personal Access Token is used. No secrets to
-  store. `refresh.php` still sends a `User-Agent` header (GitHub rejects requests
-  without one) and carries a one-line comment showing where to add an
-  `Authorization` header if a 403 ever actually appears.
+- **Authenticated GitHub API, minimal requests.** The refresh uses a fine-grained
+  read-only Personal Access Token so it does not depend on Hostinger's shared,
+  per-IP unauthenticated 60/hr budget (which a noisy co-tenant could exhaust).
+  The point is reliability, not throughput — the run itself is deliberately
+  lean: one profile call plus the repo list paginated at `per_page=100` (1-2
+  pages), and nothing else. READMEs stay a client-side, on-demand fetch and are
+  not part of the refresh.
+- **Graceful without the token.** If the token config is missing, `refresh.php`
+  still runs unauthenticated rather than hard-failing, so a first deploy before
+  the config is placed does not error out.
 - **Untrack `data.json`.** It is removed from git tracking and added to
   `.gitignore`, so hPanel pulls never clobber the cron-written file and github.io
   falls back to the live API instead of serving a stale committed snapshot.
@@ -59,31 +66,48 @@ Single-purpose PHP CLI script. Responsibilities:
 1. **CLI-only guard.** `if (php_sapi_name() !== 'cli') { exit; }` at the top, so
    hitting `.../refresh.php` in a browser does nothing; only the cron (CLI) runs
    it. On github.io it is an inert, non-executed text file.
-2. **Fetch profile.** cURL GET `https://api.github.com/users/fcarvajalbrown` with
-   headers `User-Agent: perport-refresh`, `Accept: application/vnd.github+json`.
-3. **Fetch repos (paginated).** cURL GET
+2. **Load token (optional).** Read a fine-grained PAT from a config file
+   **outside** `public_html` (default `__DIR__ . '/../gh_config.php'`, i.e. the
+   domain dir above the web root — never web-served), overridable via a constant
+   at the top and via a `GITHUB_TOKEN` env var. Empty/missing ⇒ run
+   unauthenticated.
+3. **Fetch profile.** cURL GET `https://api.github.com/users/fcarvajalbrown` with
+   headers `User-Agent: perport-refresh`, `Accept: application/vnd.github+json`,
+   and `Authorization: Bearer <token>` when a token is present.
+4. **Fetch repos (paginated, minimal).** cURL GET
    `https://api.github.com/users/fcarvajalbrown/repos?sort=updated&per_page=100&page=N`
-   looping until a page returns fewer than 100 items. Same headers.
-4. **Filter.** Keep repos where `fork === false` and `name` (case-insensitive)
+   looping only until a page returns fewer than 100 items. Same headers.
+5. **Filter.** Keep repos where `fork === false` and `name` (case-insensitive)
    `!== 'perport'` — identical to the old workflow and the client filter, so the
    snapshot matches today's output.
-5. **Assemble** `{ generated_at, profile, repos }` with
+6. **Assemble** `{ generated_at, profile, repos }` with
    `generated_at = gmdate('Y-m-d\TH:i:s\Z')` — identical shape to the current
    `data.json`.
-6. **Atomic write.** Write to `data.json.tmp` in the script's own directory, then
+7. **Atomic write.** Write to `data.json.tmp` in the script's own directory, then
    `rename()` to `data.json`, so a visitor never reads a half-written file.
-7. **Fail-safe.** On any HTTP/transport error (non-200, cURL failure, unparseable
+8. **Fail-safe.** On any HTTP/transport error (non-200, cURL failure, unparseable
    JSON), do **not** touch the existing `data.json` (serve stale rather than
    blank), print a diagnostic to STDERR, and `exit(1)`.
 
-Configuration constants at the top: the GitHub username and the output path
-(`__DIR__ . '/data.json'`). No token, no external config file.
+Configuration constants at the top: the GitHub username, the output path
+(`__DIR__ . '/data.json'`), and the token config path.
+
+### `gh_config.sample.php` (new; tracked)
+
+A template showing the shape of the real config:
+
+```php
+<?php return ['token' => 'github_pat_xxx']; // read-only, public-repo scope
+```
+
+The operator copies it to `gh_config.php` **outside `public_html`** (e.g. the
+domain dir) and fills in the token. The real file is never committed.
 
 ### Repo changes
 
 - `git rm --cached data.json` (untrack; the local/server copy is regenerated by
   the cron).
-- New `.gitignore` containing `data.json` and `data.json.tmp`.
+- New `.gitignore` containing `data.json`, `data.json.tmp`, and `gh_config.php`.
 - Delete `.github/workflows/refresh.yml` (and the now-empty workflow dir).
 - `script.js`, `index.html`, `styles.css`: **unchanged.** The snapshot-first /
   live-API-fallback logic in `script.js` already handles an absent `data.json`.
@@ -94,15 +118,16 @@ Configuration constants at the top: the GitHub username and the output path
   the equivalent sections of `AGENTS.md` to describe the PHP-cron + Pages-fallback
   model (remove the GitHub Actions invariants, which no longer apply).
 - New `docs/hostinger-setup.md`: one-time hPanel runbook — connect Git deploy,
-  select PHP 8.2/8.3, create the `0 */6 * * *` PHP cron job (note: hPanel
-  schedules are UTC), and verify `data.json` is written. No secrets step.
+  select PHP 8.2/8.3, place `gh_config.php` above the web root (via SSH/SFTP or
+  File Manager), create the `0 */6 * * *` PHP cron job (note: hPanel schedules are
+  UTC), and verify `data.json` is written.
 
 ## Data flow (after change)
 
 ```
 GitHub repo (code) --push--> hPanel Git deploy --> public_html (Hostinger)
                                                       |
-                        refresh.php (cron, every 6h UTC, unauthenticated)
+              refresh.php (cron, every 6h UTC, authenticated PAT, minimal calls)
                                                       |
                                        writes data.json atomically in place
                                                       |
@@ -116,9 +141,8 @@ github.io (backup): repo deploy, no data.json committed
 
 - Network/API failure in `refresh.php`: existing `data.json` left intact; exit 1
   (visible in hPanel cron logs). Next run recovers.
-- Occasional shared-IP unauthenticated 403: same fail-safe path; retried next run.
-  Escalation option (add an `Authorization` header) is documented inline but not
-  wired up.
+- Missing token config: runs unauthenticated (graceful), still produces
+  `data.json`.
 - Browser side: unchanged. `script.js` renders an inline `.error` banner on
   fetch failure and uses `escapeHtml` for all GitHub-supplied text.
 
@@ -140,6 +164,4 @@ No automated test suite in this repo (by design). Verification is manual:
 ## Out of scope
 
 - Any change to the site's look, JS behavior, or README-on-modal live fetch.
-- Authenticated GitHub API access / token storage (explicitly dropped as
-  unnecessary for a portfolio).
 - Keeping GitHub Actions in any form.
