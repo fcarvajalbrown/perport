@@ -28,7 +28,7 @@ once (step 4 below).
 shared with other tenants, so the unauthenticated 60/hr GitHub API limit can
 occasionally be exhausted by someone else's traffic on the same IP. A token
 avoids that without changing how often the refresh actually calls the API (it
-still only makes 1-2 requests every 6 hours).
+still only makes 1-2 requests per run, run hourly).
 
 1. Create a fine-grained GitHub Personal Access Token: read-only, no write
    scopes, restricted to public repositories.
@@ -53,9 +53,8 @@ still only makes 1-2 requests every 6 hours).
 1. hPanel -> Websites -> Dashboard -> Advanced -> Cron Jobs.
 2. Type: **PHP**.
 3. Path: `public_html/refresh.php` (adjust if your deploy path differs).
-4. Schedule: every 6 hours — `0 */6 * * *`. hPanel cron schedules run in
-   **UTC**; the workflow this replaces also ran in UTC (`0 */6 * * *`), so no
-   time-zone adjustment is needed.
+4. Schedule: every hour — `0 * * * *` (Minute `0`, Hour "every hour"/`*`, Day/
+   Month/Weekday left at "every"). hPanel cron schedules run in **UTC**.
 5. Save.
 
 ## 5. Verify

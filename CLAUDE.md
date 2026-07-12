@@ -18,7 +18,7 @@ The source files:
 
 The site shows GitHub data via a **snapshot-first model with a live-API fallback**:
 
-1. **Primary path (Hostinger) — `data.json` refreshed by `refresh.php`.** An hPanel cron job runs `refresh.php` every 6 hours (`0 */6 * * *`, UTC). It fetches the profile and all repos from the GitHub API (authenticated with a fine-grained PAT when `gh_config.php` is present, otherwise unauthenticated), filters out forks and the `perport` repo, and atomically overwrites `data.json` in `public_html`. The browser fetches that static file (cache-busted, `no-store`) on load — no GitHub API calls from visitors.
+1. **Primary path (Hostinger) — `data.json` refreshed by `refresh.php`.** An hPanel cron job runs `refresh.php` every hour (`0 * * * *`, UTC). It fetches the profile and all repos from the GitHub API (authenticated with a fine-grained PAT when `gh_config.php` is present, otherwise unauthenticated), filters out forks and the `perport` repo, and atomically overwrites `data.json` in `public_html`. The browser fetches that static file (cache-busted, `no-store`) on load — no GitHub API calls from visitors.
 2. **Backup path (GitHub Pages) — live API.** Pages does not run `refresh.php` (there is no cron there) and `data.json` is intentionally untracked, so on Pages `script.js` always falls back to the original client-side GitHub API calls (`fetchProfile` + paginated `loadMoreRepos`). Keep this fallback working when editing `script.js`.
 3. **Local dev — live API**, same reason as (2): no `data.json` present unless you run `refresh.php` locally.
 
