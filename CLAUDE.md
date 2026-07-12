@@ -60,7 +60,24 @@ To exercise the snapshot path locally: `php refresh.php` from the repo root prod
 
 ## Working with git here
 
-The local working copy may not start as a git repo, and SSH keys may not be loaded in the tool shell. Use `gh auth setup-git` and the HTTPS remote (`https://github.com/fcarvajalbrown/perport.git`). The default branch is `master`. Hostinger's hPanel Git deploy pulls from this branch; GitHub Pages also deploys from it as the backup.
+The local working copy may not start as a git repo, and SSH keys may not be loaded in the tool shell. Use `gh auth setup-git` and the HTTPS remote (`https://github.com/fcarvajalbrown/perport.git`). The default branch is `master`. GitHub Pages deploys from it automatically as the backup.
+
+## Deploying to Hostinger
+
+The Hostinger deployment is a plain `git clone` done over SSH directly into
+`public_html` (hPanel's Git-deploy UI feature was never connected). This means
+`git push` to GitHub does **not** auto-sync the live site — after pushing,
+also SSH in and pull:
+
+```bash
+git push origin master
+ssh -p 65002 <user>@<host> "cd domains/fcarvajalbrown.com/public_html && git pull origin master"
+```
+
+SSH host/port/user and the account password are in the gitignored `.env` file
+at the repo root — never commit that file, print its contents into a commit,
+or paste it into a public-facing doc. If `.env` is missing, ask the user for
+the connection details before attempting to deploy.
 
 ## No AI attribution anywhere
 
