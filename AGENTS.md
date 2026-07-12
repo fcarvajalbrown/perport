@@ -11,11 +11,15 @@ This is a static, dependency-free portfolio site (`index.html`, `styles.css`, `s
 - **Do not assume repository or project names from the local directory.** The folder name on disk may differ from the actual GitHub repository name. Always confirm the correct remote identifier with the user before writing filters, URLs, or references.
 - **Verify values against live sources when possible.** If a user mentions a GitHub repo name, use that exact name rather than inferring from the filesystem.
 
-## File Creation Policy
+## Git & Change Conventions
 
-**This is enforced for all agents working on this project:**
-
-- Create or modify **one file at a time**.
-- Ask for explicit user confirmation before each file.
-- Wait for the user to approve before proceeding to the next file.
-- Exception: trivial single-line fixes in a known file may be done directly, but announce them.
+- **No AI attribution anywhere.** Never add a `Co-Authored-By: Claude` (or any
+  other AI/model) trailer to commits, never add a "Generated with Claude Code"
+  line to PR descriptions, and never credit or mention an AI in commits, PRs,
+  code, comments, or docs.
+- **Never open a pull request unless explicitly asked to in that turn.** Commit
+  and push directly to the working branch. Do not propose or run
+  `gh pr create` on your own initiative.
+- Work through an approved plan task-by-task, committing each task as it's
+  completed, without pausing for per-file confirmation — the plan itself is
+  the approval.
