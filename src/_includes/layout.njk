@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home — Felipe Carvajal Brown</title>
+    <title>{{ title }} — Felipe Carvajal Brown</title>
     <link rel="stylesheet" href="/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="page-editorial">
+<body class="{{ bodyClass }}">
     <nav class="site-nav">
         <div class="site-nav-inner">
             <a class="site-nav-brand" href="/">FCB</a>
@@ -17,16 +17,15 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="site-nav-links">
-                <li><a href="/" class="active" aria-current="page">Home</a></li>
-                <li><a href="/writing/">Writing</a></li>
-                <li><a href="/portfolio/">Portfolio</a></li>
-                <li><a href="/works/">Works</a></li>
+                <li><a href="/"{% if page.url == "/" %} class="active" aria-current="page"{% endif %}>Home</a></li>
+                <li><a href="/writing/"{% if "/writing/" in page.url %} class="active" aria-current="page"{% endif %}>Writing</a></li>
+                <li><a href="/portfolio/"{% if "/portfolio/" in page.url %} class="active" aria-current="page"{% endif %}>Portfolio</a></li>
+                <li><a href="/works/"{% if "/works/" in page.url %} class="active" aria-current="page"{% endif %}>Works</a></li>
             </ul>
         </div>
     </nav>
 
-    &lt;p&gt;Placeholder home page. Replaced in Task 5.&lt;/p&gt;
-
+    {{ content }}
 
     <footer class="site-footer">
         <p>Felipe Carvajal Brown &middot; Santiago, Chile</p>
