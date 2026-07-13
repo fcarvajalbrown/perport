@@ -17,7 +17,7 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 |------|------|--------|----------|
 | 1 | Portfolio snapshot path `/data.json` | **Done** (2026-07-13) | P0 |
 | — | `.htaccess` cache policy | **Done** (2026-07-13) | P0 |
-| 2 | Static content in initial HTML | Not started | P0 |
+| 2 | Static content in initial HTML | **Done** (2026-07-13) | P0 |
 | 3 | Meta description + Open Graph/Twitter | Not started | P1 |
 | 4 | Cross-domain canonical | Not started | P1 |
 | 5 | `sitemap.xml` + `robots.txt` | Not started | P1 |
@@ -29,7 +29,13 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 
 ---
 
-## Task 2 — Static content in the initial HTML (also fixes the "Loading..." gap)
+## Task 2 — Static content in the initial HTML (also fixes the "Loading..." gap) — Done (2026-07-13)
+
+Both portfolio pages now render `<h1 id="name">Felipe Carvajal Brown</h1>`, a static
+`#bio` default (restated tagline opening), and a `<noscript>` fallback linking to
+`github.com/fcarvajalbrown`. `script.js` `renderProfile` still overwrites `#name`/`#bio`
+on snapshot/live load. Applied to both `src/portfolio/index.html` (ES) and
+`src/en/portfolio/index.html` (EN).
 
 **Priority:** P0. **Why:** The portfolio `<h1>` renders "Loading..." and the bio
 "Fetching profile..." until JS fetches the snapshot, so (a) non-JS crawlers
