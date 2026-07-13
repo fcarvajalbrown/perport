@@ -1,0 +1,22 @@
+# Cache policy for the static site.
+# Goal: never let a returning visitor run stale HTML that points at an old,
+# since-fixed script. HTML always revalidates; hashed assets cache forever
+# (their ?v=<hash> query changes whenever the file content changes).
+
+<IfModule mod_headers.c>
+    # HTML: always revalidate so the current asset hashes are picked up.
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # data.json: always fresh (JS also fetches it with no-store).
+    <FilesMatch "^data\.json$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # Fingerprinted static assets: safe to cache long-term because the URL
+    # carries a content hash (?v=...) that changes when the file changes.
+    <FilesMatch "\.(css|js|png|webp|svg|woff2?|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
