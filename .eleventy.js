@@ -4,6 +4,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
   eleventyConfig.addPassthroughCopy({ "src/refresh.php": "refresh.php" });
   eleventyConfig.addPassthroughCopy({ "src/gh_config.sample.php": "gh_config.sample.php" });
+  eleventyConfig.addPassthroughCopy({ "src/logo.png": "logo.png" });
 
   return {
     dir: {
