@@ -131,5 +131,17 @@
     <footer class="site-footer">
         <p>Felipe Carvajal Brown &middot; Santiago, Chile</p>
     </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
 </body>
 </html>

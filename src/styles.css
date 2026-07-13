@@ -964,3 +964,39 @@ footer {
     font-size: 0.9rem;
     font-weight: 500;
 }
+
+/* ===== Responsive nav ===== */
+@media (max-width: 640px) {
+    .site-nav-toggle {
+        display: flex;
+    }
+
+    .site-nav-name {
+        font-size: 0.9rem;
+    }
+
+    .site-nav-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--bg-elevated);
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 1.5rem 1rem;
+        display: none;
+    }
+
+    .site-nav-links.open {
+        display: flex;
+    }
+
+    .site-nav-links li {
+        padding: 0.6rem 0;
+    }
+
+    .editorial-title {
+        font-size: 2rem;
+    }
+}
