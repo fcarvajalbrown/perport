@@ -4,15 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page personal portfolio for the GitHub user `fcarvajalbrown`. The primary deployment is a Hostinger Business shared-hosting account (via hPanel Git deploy); a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. It is a static site with **no build step and no test suite**.
+A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The primary deployment is a Hostinger Business shared-hosting account; a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
 
-The source files:
-- `index.html` — static markup, including the hidden repo-detail modal and hero/stats scaffolding that JS fills in.
-- `script.js` — all behavior (data loading, rendering, infinite scroll, modal).
-- `styles.css` — all styling, driven by CSS custom properties in `:root` (dark theme, amber `--accent`).
-- `refresh.php` — PHP CLI script that fetches the profile + repos from the GitHub API and writes `data.json`. Run on a schedule by an hPanel cron job on Hostinger. `data.json` is untracked (see `.gitignore`) and regenerated on the server, not committed.
-- `gh_config.sample.php` — template showing the shape of the (untracked) token config file `refresh.php` reads.
+The four pages (nav order Home / Writing / Portfolio / Works):
+- `/` — Home/About landing (editorial: serif-italic headline, warm accent `#d9a55c`).
+- `/writing/` — writing archive (stub for now; content model is a separate, not-yet-written spec).
+- `/portfolio/` — the GitHub repo grid + modal (Inter sans-serif, amber `#f59e0b`), fed by `refresh.php`/`data.json`.
+- `/works/` — stub for now (content design is a separate, not-yet-written spec).
+
+The source tree:
+- `src/_includes/layout.njk` — shared `<head>`, top nav, footer; renders each page into `{{ content | safe }}`.
+- `src/index.md`, `src/writing/index.md`, `src/works/index.md` — editorial pages (Markdown + inline HTML).
+- `src/portfolio/index.html` — the repo grid + hero + hidden modal that JS fills in.
+- `src/script.js` — all portfolio behavior (data loading, rendering, infinite scroll, modal). Loaded only on `/portfolio/`.
+- `src/styles.css` — all styling, CSS custom properties in `:root` (dark theme). `.page-editorial` overrides `--accent` to `#d9a55c`; `.page-portfolio` keeps amber.
+- `src/logo.png` — spade-skull brand mark (nav brand + favicon).
+- `src/refresh.php` — PHP CLI script that fetches the profile + repos from the GitHub API and writes `data.json`. Run on a schedule by an hPanel cron job on Hostinger. `data.json` is untracked (see `.gitignore`) and regenerated on the server, not committed.
+- `src/gh_config.sample.php` — template showing the shape of the (untracked) token config file `refresh.php` reads.
+- `.eleventy.js` — 11ty config: input `src`, output `_site`, passthrough copies for `styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, `logo.png`.
+- `_site/` — **build output, committed to git** (unusual for 11ty, but required: there is no server-side build step, so the committed output is what the `git pull`-based deploy serves).
 - `docs/hostinger-setup.md` — one-time hPanel setup runbook (Git deploy, PHP version, token config, cron job).
+
+`styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, and `logo.png` are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
 
 ## How data flows (the important part)
 
@@ -34,15 +47,19 @@ The site shows GitHub data via a **snapshot-first model with a live-API fallback
 
 ## Running it locally
 
-No dev server in-repo. Open `index.html`, or serve the folder:
+Build with Eleventy, then serve the compiled `_site/`:
 
 ```powershell
-python -m http.server 8000   # http://localhost:8000
+npm install                        # once, installs @11ty/eleventy
+npx @11ty/eleventy                 # or: npm run build  -> compiles src/ into _site/
+cd _site; python -m http.server 8000   # http://localhost:8000
 ```
 
-Locally there is no `data.json` unless you run `php refresh.php` yourself, so the live-API fallback runs by default (subject to the 60/hr unauthenticated limit). Two runtime dependencies load from CDNs (not vendored): Google Fonts (Inter) and `marked` (Markdown parser for repo READMEs). READMEs are always fetched live on modal-open via the GitHub API; they are intentionally not part of the snapshot.
+`npx @11ty/eleventy --serve` (`npm run serve`) runs a watching dev server that rebuilds on change. Verification is manual (no test suite): build without errors, click through all four nav pages plus the Portfolio repo-card modal, and check mobile nav at <=640px.
 
-To exercise the snapshot path locally: `php refresh.php` from the repo root produces `data.json` next to it, then serve the folder as above.
+Locally there is no `data.json` unless you run `refresh.php` yourself, so the portfolio's live-API fallback runs by default (subject to the 60/hr unauthenticated limit). Two runtime dependencies load from CDNs (not vendored): Google Fonts (Inter) and `marked` (Markdown parser for repo READMEs). READMEs are always fetched live on modal-open via the GitHub API; they are intentionally not part of the snapshot.
+
+To exercise the snapshot path locally: build first, then run `C:\Users\Beetlejuice\dev-tools\php\php.exe _site/refresh.php`, which writes `data.json` next to the copied `refresh.php` inside `_site/`; then serve `_site/` as above.
 
 ## Other architecture notes
 

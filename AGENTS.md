@@ -1,6 +1,6 @@
 ## Project Type
 
-This is a static, dependency-free portfolio site (`index.html`, `styles.css`, `script.js`) deployed primarily on Hostinger (via hPanel Git deploy), with a GitHub Pages deployment kept as a backup. There is no build step and no test suite. The GitHub data shown on the site is snapshotted into `data.json` by `refresh.php`, run on a schedule by an hPanel cron job; see `CLAUDE.md` for the architecture and `docs/hostinger-setup.md` for the one-time hPanel setup.
+This is a four-page personal site (Home / Writing / Portfolio / Works) built with Eleventy (11ty): source in `src/`, compiled to `_site/`. The build runs locally only and `_site/` is committed to git (Hostinger has no server-side build step). It is deployed primarily on Hostinger, with a GitHub Pages deployment kept as a backup. There is a local build step (`npx @11ty/eleventy`) but no test suite — verification is manual. The GitHub data shown on the Portfolio page is snapshotted into `data.json` by `refresh.php`, run on a schedule by an hPanel cron job; see `CLAUDE.md` for the architecture and `docs/hostinger-setup.md` for the one-time hPanel setup.
 
 ## Communication Rules
 
