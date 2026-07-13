@@ -447,9 +447,13 @@ function fetchWithTimeout(url, opts = {}, ms = 8000) {
 
 // Load the pre-built snapshot committed by the refresh workflow. Cache-busted and
 // no-store so the browser always sees the latest committed data.json.
+// Absolute path: the portfolio page lives at /portfolio/, so a relative
+// 'data.json' would wrongly resolve to /portfolio/data.json (404). The snapshot
+// is written at the site root by refresh.php. On the GitHub Pages backup the
+// snapshot is absent (gitignored), so this still falls back to the live API.
 async function loadSnapshot() {
     try {
-        const res = await fetchWithTimeout(`data.json?t=${Date.now()}`, { cache: 'no-store' });
+        const res = await fetchWithTimeout(`/data.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return false;
         const data = await res.json();
         if (!data || !data.profile || !Array.isArray(data.repos)) return false;
