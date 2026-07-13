@@ -15,6 +15,13 @@ This is non-negotiable and overrides momentum on any other task. If you are abou
 
 The full checklist lives in the global `~/.claude/CLAUDE.md` ("AI-tell checklist" and "Final pass" sections) and applies here in full. When in doubt, invoke the article-humanizer / voz-de-felipe skills. Shipping AI-tell copy to the live site is a failure of this project's most basic standard — do not do it.
 
+## Active work: SEO roadmap
+
+Ongoing SEO/performance tasks live in `SEOROADMAP.md` (rationale and research in
+`SEO.md`). It is structured as one self-contained task per agent. Pick up the next
+`Not started` task there. **Delete `SEOROADMAP.md` and this pointer once every
+task in it is Done.**
+
 ## What this is
 
 A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The primary deployment is a Hostinger Business shared-hosting account; a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
