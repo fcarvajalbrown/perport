@@ -815,17 +815,22 @@ footer {
 .site-nav-brand {
     display: inline-flex;
     align-items: center;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    gap: 0.6rem;
     color: var(--text);
     text-decoration: none;
-    font-size: 1rem;
 }
 
 .site-nav-logo {
-    height: 34px;
+    height: 32px;
     width: auto;
     display: block;
+}
+
+.site-nav-name {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 1rem;
+    white-space: nowrap;
 }
 
 .site-nav-links {
