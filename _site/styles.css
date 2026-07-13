@@ -851,6 +851,21 @@ footer {
     color: var(--text);
 }
 
+.site-nav-lang {
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem !important;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.site-nav-lang:hover {
+    border-color: var(--accent);
+    color: var(--accent) !important;
+}
+
 .site-nav-toggle {
     display: none;
     flex-direction: column;

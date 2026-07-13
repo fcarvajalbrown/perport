@@ -1,20 +1,55 @@
----
-layout: layout.njk
-title: Portafolio
-lang: es
-bodyClass: page-portfolio
-altUrl: /en/portfolio/
-hreflangEs: /portfolio/
-hreflangEn: /en/portfolio/
----
-<div class="container">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio · Felipe Carvajal Brown</title>
+    <link rel="icon" type="image/png" href="/logo.png?v=e9d33d4d">
+    <link rel="stylesheet" href="/styles.css?v=f79184c2">
+    
+    <link rel="alternate" hreflang="es" href="https://fcarvajalbrown.com/portfolio/">
+    <link rel="alternate" hreflang="en" href="https://fcarvajalbrown.com/en/portfolio/">
+    <link rel="alternate" hreflang="x-default" href="https://fcarvajalbrown.com/portfolio/">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="page-portfolio">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/en/" aria-label="Home, Felipe Carvajal Brown">
+                <img src="/logo.png?v=e9d33d4d" alt="" class="site-nav-logo" width="29" height="32" />
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/en/">Home</a></li>
+                
+                <li><a href="/writing/">Writing</a></li>
+                
+                <li><a href="/en/portfolio/" class="active" aria-current="page">Portfolio</a></li>
+                
+                <li><a href="/works/">Works</a></li>
+                
+                <li><a class="site-nav-lang" href="/portfolio/" title="Ver en español">ES</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
     <header class="hero">
         <div class="avatar">
-            <img id="avatar-img" src="" alt="Foto de perfil" />
+            <img id="avatar-img" src="" alt="Profile picture" />
         </div>
-        <h1 id="name">Cargando...</h1>
-        <p class="tagline">Profesional en simulación numérica y ciencias de la computación. Especialista en la relación interdisciplinaria entre las áreas técnicas y comerciales. Con experiencia en proyectos de investigación y técnicas de traducción. Proactivo, riguroso y meticuloso; capaz de desempeñar funciones diversas con eficiencia. Excelentes habilidades de comunicación con clientes, colegas y superiores. Orientado al trabajo en equipo y con gran atención al detalle.</p>
-        <p id="bio" class="bio">Obteniendo perfil...</p>
+        <h1 id="name">Loading...</h1>
+        <p class="tagline">Professional in Numerical Simulations and Computer Science. Specialist in interdisciplinary relationships between technical and commercial departments. Knowledgeable in research projects and translation techniques. Proactive, rigorous, and meticulous; capable of performing diverse functions efficiently. Excellent communication skills with clients, colleagues, and superiors. Team-oriented with a high level of attention to detail.</p>
+        <p id="bio" class="bio">Fetching profile...</p>
         <div class="stats" id="profile-stats">
             <div class="stat">
                 <span class="stat-value" id="stat-repos">—</span>
@@ -22,11 +57,11 @@ hreflangEn: /en/portfolio/
             </div>
             <div class="stat">
                 <span class="stat-value" id="stat-followers">—</span>
-                <span class="stat-label">Seguidores</span>
+                <span class="stat-label">Followers</span>
             </div>
             <div class="stat">
                 <span class="stat-value" id="stat-following">—</span>
-                <span class="stat-label">Siguiendo</span>
+                <span class="stat-label">Following</span>
             </div>
         </div>
         <a href="https://github.com/fcarvajalbrown" target="_blank" rel="noopener" class="github-link">
@@ -40,13 +75,13 @@ hreflangEn: /en/portfolio/
     <main>
         <section class="repos-section">
             <div class="section-header">
-                <h2>Repositorios recientes</h2>
-                <p class="section-desc">Actualizado automáticamente desde GitHub &middot; Desplázate para ver más</p>
+                <h2>Latest Repositories</h2>
+                <p class="section-desc">Auto-updated from GitHub &middot; Scroll to load more</p>
             </div>
             <div id="repos-grid" class="repos-grid">
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>Cargando repositorios...</p>
+                    <p>Loading repositories...</p>
                 </div>
             </div>
             <div id="sentinel" class="sentinel"></div>
@@ -58,7 +93,7 @@ hreflangEn: /en/portfolio/
 <div id="repo-modal" class="modal">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
-        <button class="modal-close" aria-label="Cerrar">&times;</button>
+        <button class="modal-close" aria-label="Close">&times;</button>
         <div class="modal-body">
             <div class="modal-header">
                 <h3 id="modal-title" class="modal-title"></h3>
@@ -87,11 +122,11 @@ hreflangEn: /en/portfolio/
             <div class="modal-actions">
                 <a id="modal-link" href="#" target="_blank" rel="noopener" class="btn-primary">
                     <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                    Ver en GitHub
+                    View on GitHub
                 </a>
                 <a id="modal-homepage" href="#" target="_blank" rel="noopener" class="btn-secondary hidden">
                     <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>
-                    Demo en vivo
+                    Live Demo
                 </a>
             </div>
             <div id="modal-readme" class="modal-readme hidden">
@@ -103,4 +138,23 @@ hreflangEn: /en/portfolio/
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="{{ '/script.js' | bust }}"></script>
+<script src="/script.js?v=45276cea"></script>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago, Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>

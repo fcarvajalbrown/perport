@@ -1,10 +1,12 @@
 ---
 layout: layout.njk
-title: Writing
+title: Escritos
+lang: es
 bodyClass: page-editorial
+altUrl: /en/
 ---
 <div class="editorial-body">
-    <p class="editorial-eyebrow">Writing</p>
-    <h1 class="editorial-title">Essays, columns, and <em>notes</em>.</h1>
-    <p class="editorial-lede">This archive is being built. Published pieces will appear here soon.</p>
+    <p class="editorial-eyebrow">Escritos</p>
+    <h1 class="editorial-title">Ensayos, columnas y <em>notas</em>.</h1>
+    <p class="editorial-lede">Este archivo está en construcción. Pronto aparecerán aquí los textos publicados.</p>
 </div>

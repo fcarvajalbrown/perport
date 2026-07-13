@@ -25,7 +25,7 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 | 7 | Optimize logo image | Not started | P2 |
 | 8 | Font-loading polish | Not started | P2 |
 | 9 | Google Search Console submit | Not started (Felipe) | P1 |
-| 10 | Per-language `lang` + hreflang | Not started (with language selector) | P2 |
+| 10 | Per-language `lang` + hreflang | **Done** (2026-07-13, with language selector) | P2 |
 
 ---
 

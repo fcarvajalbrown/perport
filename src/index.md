@@ -1,28 +1,32 @@
 ---
 layout: layout.njk
-title: Home
+title: Inicio
+lang: es
 bodyClass: page-editorial
+altUrl: /en/
+hreflangEs: /
+hreflangEn: /en/
 ---
 <header class="editorial-hero">
     <p class="editorial-eyebrow">Felipe Carvajal Brown</p>
-    <h1 class="editorial-title">Engineer, <em>researcher</em>, and writer based in Santiago, Chile.</h1>
-    <p class="editorial-lede">M.Sc. in Numerical Simulation in Engineering from the Universidad Politécnica de Madrid. I build software and run numerical simulations, and I write. This site keeps all of it in one place.</p>
+    <h1 class="editorial-title">Ingeniero, <em>investigador</em> y escritor en Santiago de Chile.</h1>
+    <p class="editorial-lede">Máster en Simulación Numérica en Ingeniería por la Universidad Politécnica de Madrid. Desarrollo software, hago simulación numérica y escribo. Este sitio reúne todo eso en un solo lugar.</p>
 </header>
 
 <section class="editorial-cards">
     <a class="editorial-card" href="/writing/">
-        <h2>Writing</h2>
-        <p>Essays, columns, and notes.</p>
-        <span class="editorial-card-go">Read &rarr;</span>
+        <h2>Escritos</h2>
+        <p>Ensayos, columnas y notas.</p>
+        <span class="editorial-card-go">Leer &rarr;</span>
     </a>
     <a class="editorial-card" href="/portfolio/">
-        <h2>Portfolio</h2>
-        <p>Open-source code, pulled live from GitHub.</p>
-        <span class="editorial-card-go">Browse &rarr;</span>
+        <h2>Portafolio</h2>
+        <p>Código abierto, en vivo desde GitHub.</p>
+        <span class="editorial-card-go">Explorar &rarr;</span>
     </a>
     <a class="editorial-card" href="/works/">
-        <h2>Works</h2>
-        <p>Other things I have made.</p>
-        <span class="editorial-card-go">Explore &rarr;</span>
+        <h2>Obras</h2>
+        <p>Otras cosas que he hecho.</p>
+        <span class="editorial-card-go">Ver &rarr;</span>
     </a>
 </section>

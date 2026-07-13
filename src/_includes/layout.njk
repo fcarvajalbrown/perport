@@ -1,11 +1,18 @@
+{% set langCode = lang or 'es' %}
+{% set L = strings[langCode] %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ langCode }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} · Felipe Carvajal Brown</title>
     <link rel="icon" type="image/png" href="{{ '/logo.png' | bust }}">
     <link rel="stylesheet" href="{{ '/styles.css' | bust }}">
+    {% if hreflangEs and hreflangEn %}
+    <link rel="alternate" hreflang="es" href="https://fcarvajalbrown.com{{ hreflangEs }}">
+    <link rel="alternate" hreflang="en" href="https://fcarvajalbrown.com{{ hreflangEn }}">
+    <link rel="alternate" hreflang="x-default" href="https://fcarvajalbrown.com{{ hreflangEs }}">
+    {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +20,7 @@
 <body class="{{ bodyClass }}">
     <nav class="site-nav">
         <div class="site-nav-inner">
-            <a class="site-nav-brand" href="/" aria-label="Home, Felipe Carvajal Brown">
+            <a class="site-nav-brand" href="{{ L.nav[0].url }}" aria-label="{{ L.nav[0].label }}, Felipe Carvajal Brown">
                 <img src="{{ '/logo.png' | bust }}" alt="" class="site-nav-logo" width="29" height="32" />
                 <span class="site-nav-name">Felipe Carvajal Brown</span>
             </a>
@@ -21,10 +28,10 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="site-nav-links">
-                <li><a href="/"{% if page.url == "/" %} class="active" aria-current="page"{% endif %}>Home</a></li>
-                <li><a href="/writing/"{% if "/writing/" in page.url %} class="active" aria-current="page"{% endif %}>Writing</a></li>
-                <li><a href="/portfolio/"{% if "/portfolio/" in page.url %} class="active" aria-current="page"{% endif %}>Portfolio</a></li>
-                <li><a href="/works/"{% if "/works/" in page.url %} class="active" aria-current="page"{% endif %}>Works</a></li>
+                {% for item in L.nav %}
+                <li><a href="{{ item.url }}"{% if page.url == item.url %} class="active" aria-current="page"{% endif %}>{{ item.label }}</a></li>
+                {% endfor %}
+                <li><a class="site-nav-lang" href="{{ altUrl or L.nav[0].url }}" title="{{ L.toggleTitle }}">{{ L.toggleLabel }}</a></li>
             </ul>
         </div>
     </nav>
@@ -32,7 +39,7 @@
     {{ content | safe }}
 
     <footer class="site-footer">
-        <p>Felipe Carvajal Brown &middot; Santiago, Chile</p>
+        <p>{{ L.footer }}</p>
     </footer>
 
     <script>
