@@ -24,7 +24,7 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 | 6 | Person/ProfilePage JSON-LD | **Done** (2026-07-13) | P1 |
 | 7 | Optimize logo image | **Done** (2026-07-13) | P2 |
 | 8 | Font-loading polish | **Done** (2026-07-13) | P2 |
-| 9 | Google Search Console submit | Not started (Felipe) | P1 |
+| 9 | Google Search Console submit | Verification tag deployed; awaiting Felipe's console steps | P1 |
 | 10 | Per-language `lang` + hreflang | **Done** (2026-07-13, with language selector) | P2 |
 
 ---
@@ -255,6 +255,11 @@ as unnecessary.
 ---
 
 ## Task 9 — Google Search Console (Felipe's manual step)
+
+**Status (2026-07-13):** ownership meta tag deployed site-wide via `layout.njk`
+(`<meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">`).
+Remaining is Felipe's own console work: click **Verify** on the URL-prefix
+property, submit `sitemap.xml`, and use **Request indexing** per page.
 
 **Priority:** P1. Add `fcarvajalbrown.com` as a property in Search Console,
 verify ownership (DNS TXT or an HTML verification file — an agent can drop a
