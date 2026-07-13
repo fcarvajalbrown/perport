@@ -6,7 +6,7 @@ bodyClass: page-editorial
 <header class="editorial-hero">
     <p class="editorial-eyebrow">Felipe Carvajal Brown</p>
     <h1 class="editorial-title">Engineer, <em>researcher</em>, and writer based in Santiago, Chile.</h1>
-    <p class="editorial-lede">M.Sc. in Numerical Simulation in Engineering (Universidad Politécnica de Madrid). I work at the seam between technical and human problems — simulation, software, and the words that hold them together.</p>
+    <p class="editorial-lede">M.Sc. in Numerical Simulation in Engineering from the Universidad Politécnica de Madrid. I build software and run numerical simulations, and I write. This site keeps all of it in one place.</p>
 </header>
 
 <section class="editorial-cards">
