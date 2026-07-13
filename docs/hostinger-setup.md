@@ -1,5 +1,33 @@
 # Hostinger setup runbook
 
+## Current deployment architecture (as built)
+
+The site is an Eleventy build: source in `src/`, compiled to the committed
+`_site/`. Because Hostinger shared hosting has no general-purpose Node runtime,
+the build runs locally and `_site/` is committed. On the server:
+
+```
+~/domains/fcarvajalbrown.com/
+  repo/                     full git clone — NOT web-served
+  public_html -> repo/_site  symlink; the web root the server actually serves
+  public_html.bak/           pre-migration clone, kept for rollback
+```
+
+Deploy loop: build locally, commit `_site/`, `git push`, then on the server
+`cd ~/domains/fcarvajalbrown.com/repo && git pull origin master`. The symlink
+serves the fresh `_site` with no extra step. Auth uses the ed25519 key at
+`~/.ssh/perport_hostinger` (registered in hPanel SSH Access as "Claude"); the
+correct SSH IP/port/user are in the gitignored `.env`. See the "Deploying to
+Hostinger" section of `CLAUDE.md` for the full deploy + rollback commands.
+
+Note: hPanel's Git-deploy UI was never connected — the migration to the
+sibling-clone + symlink layout was done manually over SSH. The sections below
+are the *original* intended one-time setup, kept for reference; where they say
+`public_html/...`, the live reality is `repo/_site/...` (which `public_html`
+symlinks to, so the old paths still resolve).
+
+---
+
 One-time steps to wire this repo up as the primary deployment on a Hostinger
 Business shared-hosting plan. Do these in hPanel in order.
 
@@ -52,7 +80,8 @@ still only makes 1-2 requests per run, run hourly).
 
 1. hPanel -> Websites -> Dashboard -> Advanced -> Cron Jobs.
 2. Type: **PHP**.
-3. Path: `public_html/refresh.php` (adjust if your deploy path differs).
+3. Path: `~/domains/fcarvajalbrown.com/repo/_site/refresh.php` (the current
+   live path; the old `public_html/refresh.php` still resolves via the symlink).
 4. Schedule: every hour — `0 * * * *` (Minute `0`, Hour "every hour"/`*`, Day/
    Month/Weekday left at "every"). hPanel cron schedules run in **UTC**.
 5. Save.

@@ -94,20 +94,49 @@ The local working copy may not start as a git repo, and SSH keys may not be load
 
 ## Deploying to Hostinger
 
-The Hostinger deployment is a plain `git clone` done over SSH directly into
-`public_html` (hPanel's Git-deploy UI feature was never connected). This means
-`git push` to GitHub does **not** auto-sync the live site — after pushing,
-also SSH in and pull:
+The site is built locally (`npx @11ty/eleventy`) into the committed `_site/`
+directory. On the server the repo is cloned into a **sibling directory**
+`~/domains/fcarvajalbrown.com/repo`, and `public_html` is a **symlink** to
+`repo/_site`:
 
-```bash
-git push origin master
-ssh -p 65002 <user>@<host> "cd domains/fcarvajalbrown.com/public_html && git pull origin master"
+```
+~/domains/fcarvajalbrown.com/
+  repo/                     full git clone (src/, _site/, config) — NOT web-served
+  public_html -> repo/_site  symlink; this is what the web server serves
+  public_html.bak/           the pre-migration clone, kept for rollback (remove once stable)
 ```
 
-SSH host/port/user and the account password are in the gitignored `.env` file
-at the repo root — never commit that file, print its contents into a commit,
-or paste it into a public-facing doc. If `.env` is missing, ask the user for
-the connection details before attempting to deploy.
+`git push` to GitHub does **not** auto-sync the live site. The routine deploy
+is: build locally, commit `_site/`, push, then pull on the server (the symlink
+serves the fresh `_site` with no extra step):
+
+```bash
+npx @11ty/eleventy          # rebuild _site/ after any src/ change
+git add _site/ && git commit -m "..." && git push origin master
+# then on the server:
+ssh -i ~/.ssh/perport_hostinger -p 65002 <user>@<host> \
+  "cd ~/domains/fcarvajalbrown.com/repo && git pull origin master"
+```
+
+**Auth:** use the ed25519 key at `~/.ssh/perport_hostinger` (public key is
+registered in hPanel under the name "Claude"). Password auth in `.env` is a
+fallback; this shell has no `sshpass`, so key auth is the working path. The
+correct SSH **IP is in `.env`** (`SSH_HOST` — verify it against hPanel's SSH
+Details panel; an earlier stale IP there caused every auth to fail against the
+wrong host). Host/port/user live in the gitignored `.env`; never commit it,
+print its contents into a commit, or paste it into a public-facing doc. If
+`.env` or the key is missing, ask the user before attempting to deploy.
+
+**Snapshot/token on the server:** `data.json` and `gh_config.php` live next to
+the copied `refresh.php` inside `repo/_site/` (both gitignored). `data.json` is
+regenerated hourly by the hPanel cron; there is currently no `gh_config.php`
+(refresh runs unauthenticated, which is fine at this volume). The cron command
+should point at `php ~/domains/fcarvajalbrown.com/repo/_site/refresh.php` (the
+old `public_html/refresh.php` path still resolves via the symlink). The hPanel
+cron is not visible via `crontab -l`; manage it in hPanel's Cron Jobs UI.
+
+**Rollback:** `rm public_html && mv public_html.bak public_html` restores the
+previous state instantly.
 
 ## No AI attribution anywhere
 
