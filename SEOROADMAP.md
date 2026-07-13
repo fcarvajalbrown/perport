@@ -19,8 +19,8 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 | — | `.htaccess` cache policy | **Done** (2026-07-13) | P0 |
 | 2 | Static content in initial HTML | **Done** (2026-07-13) | P0 |
 | 3 | Meta description + Open Graph/Twitter | **Done** (2026-07-13) | P1 |
-| 4 | Cross-domain canonical | Not started | P1 |
-| 5 | `sitemap.xml` + `robots.txt` | Not started | P1 |
+| 4 | Cross-domain canonical | **Done** (2026-07-13) | P1 |
+| 5 | `sitemap.xml` + `robots.txt` | **Done** (2026-07-13) | P1 |
 | 6 | Person/ProfilePage JSON-LD | Not started | P1 |
 | 7 | Optimize logo image | Not started | P2 |
 | 8 | Font-loading polish | Not started | P2 |
@@ -107,7 +107,12 @@ facts only), and the og-image artwork.
 
 ---
 
-## Task 4 — Cross-domain canonical
+## Task 4 — Cross-domain canonical — Done (2026-07-13)
+
+`layout.njk` now renders `<link rel="canonical" href="https://fcarvajalbrown.com{{ page.url }}">`
+in `<head>` (always the primary domain, absolute), so the six pages carry a
+self-canonical on Hostinger and a cross-domain canonical to the primary on the
+Pages backup.
 
 **Priority:** P1. **Why:** The GitHub Pages backup
 (`fcarvajalbrown.github.io/perport/`) serves identical content to
@@ -127,7 +132,15 @@ Always the primary domain, absolute, even in the Pages build.
 
 ---
 
-## Task 5 — sitemap.xml + robots.txt
+## Task 5 — sitemap.xml + robots.txt — Done (2026-07-13)
+
+`src/robots.txt` (passthrough-copied in `.eleventy.js`) allows all and points to
+the sitemap. `src/sitemap.njk` (`permalink: /sitemap.xml`,
+`eleventyExcludeFromCollections`) loops `collections.all`, filters to `.html`
+outputs, and emits absolute `https://fcarvajalbrown.com` `<loc>`s. The sitemap
+lists all six real pages (ES `/`, `/portfolio/`, `/writing/`, `/works/`; EN
+`/en/`, `/en/portfolio/`) — the four-page count in the original spec predates the
+bilingual work (Task 10).
 
 **Priority:** P1. **Why:** Neither exists; both are needed for reliable
 discovery and Search Console submission.

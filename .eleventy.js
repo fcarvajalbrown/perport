@@ -27,6 +27,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/logo.png": "logo.png" });
   eleventyConfig.addPassthroughCopy({ "src/og-image.png": "og-image.png" });
   eleventyConfig.addPassthroughCopy({ "src/.htaccess": ".htaccess" });
+  eleventyConfig.addPassthroughCopy({ "src/robots.txt": "robots.txt" });
 
   return {
     dir: {
