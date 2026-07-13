@@ -18,7 +18,7 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 | 1 | Portfolio snapshot path `/data.json` | **Done** (2026-07-13) | P0 |
 | — | `.htaccess` cache policy | **Done** (2026-07-13) | P0 |
 | 2 | Static content in initial HTML | **Done** (2026-07-13) | P0 |
-| 3 | Meta description + Open Graph/Twitter | Not started | P1 |
+| 3 | Meta description + Open Graph/Twitter | **Done** (2026-07-13) | P1 |
 | 4 | Cross-domain canonical | Not started | P1 |
 | 5 | `sitemap.xml` + `robots.txt` | Not started | P1 |
 | 6 | Person/ProfilePage JSON-LD | Not started | P1 |
@@ -66,7 +66,16 @@ new facts; a plain restatement of the existing tagline is fine).
 
 ---
 
-## Task 3 — Meta description + Open Graph + Twitter cards
+## Task 3 — Meta description + Open Graph + Twitter cards — Done (2026-07-13)
+
+Each of the six pages has a unique `description` in its front matter (Home ES/EN,
+Portfolio ES/EN, Writing ES, Works ES; the two Home ones trimmed to ~150 chars).
+`layout.njk` renders `<meta name="description">` plus the OG and Twitter tags
+(`og:type/site_name/title/description/url/image/image:width/height/alt/locale`,
+`twitter:card=summary_large_image` + title/description/image). A real
+1200x630 `src/og-image.png` (spade-skull on the dark brand palette, name and
+roles) is passthrough-copied in `.eleventy.js`. `og:locale` switches es_ES/en_US
+by `langCode`.
 
 **Priority:** P1. **Why:** No page has a meta description or social tags; SERP
 snippets and link previews are unmanaged.

@@ -1,6 +1,7 @@
 ---
 layout: layout.njk
 title: Obras
+description: "Trabajo creativo de Felipe Carvajal Brown más allá del código. Un espacio en construcción, próximamente."
 lang: es
 bodyClass: page-editorial
 altUrl: /en/

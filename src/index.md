@@ -1,6 +1,7 @@
 ---
 layout: layout.njk
 title: Inicio
+description: "Felipe Carvajal Brown: ingeniero, investigador y escritor en Santiago de Chile. Máster en Simulación Numérica (UPM). Software, simulación y escritura."
 lang: es
 bodyClass: page-editorial
 altUrl: /en/
