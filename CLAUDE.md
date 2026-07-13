@@ -15,13 +15,6 @@ This is non-negotiable and overrides momentum on any other task. If you are abou
 
 The full checklist lives in the global `~/.claude/CLAUDE.md` ("AI-tell checklist" and "Final pass" sections) and applies here in full. When in doubt, invoke the article-humanizer / voz-de-felipe skills. Shipping AI-tell copy to the live site is a failure of this project's most basic standard — do not do it.
 
-## Active work: SEO roadmap
-
-Ongoing SEO/performance tasks live in `SEOROADMAP.md` (rationale and research in
-`SEO.md`). It is structured as one self-contained task per agent. Pick up the next
-`Not started` task there. **Delete `SEOROADMAP.md` and this pointer once every
-task in it is Done.**
-
 ## What this is
 
 A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The primary deployment is a Hostinger Business shared-hosting account; a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
@@ -38,14 +31,14 @@ The source tree:
 - `src/portfolio/index.html` — the repo grid + hero + hidden modal that JS fills in.
 - `src/script.js` — all portfolio behavior (data loading, rendering, infinite scroll, modal). Loaded only on `/portfolio/`.
 - `src/styles.css` — all styling, CSS custom properties in `:root` (dark theme). `.page-editorial` overrides `--accent` to `#d9a55c`; `.page-portfolio` keeps amber.
-- `src/logo.png` — spade-skull brand mark (nav brand + favicon).
+- `src/logo.png` — full-resolution spade-skull brand mark; the source image for the small nav/favicon variants, not served directly. `scripts/gen-logo-assets.js` (uses `sharp`) regenerates `src/logo-nav.png`, `src/logo-nav.webp`, `src/favicon-32.png`, and `src/apple-touch-icon.png` from it; the layout references those, not `logo.png`.
 - `src/refresh.php` — PHP CLI script that fetches the profile + repos from the GitHub API and writes `data.json`. Run on a schedule by an hPanel cron job on Hostinger. `data.json` is untracked (see `.gitignore`) and regenerated on the server, not committed.
 - `src/gh_config.sample.php` — template showing the shape of the (untracked) token config file `refresh.php` reads.
-- `.eleventy.js` — 11ty config: input `src`, output `_site`, passthrough copies for `styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, `logo.png`.
+- `.eleventy.js` — 11ty config: input `src`, output `_site`, the `bust` cache-busting filter, and passthrough copies for `styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, `og-image.png`, `.htaccess`, `robots.txt`, and the logo/favicon variants (`logo-nav.png`, `logo-nav.webp`, `favicon-32.png`, `apple-touch-icon.png`).
 - `_site/` — **build output, committed to git** (unusual for 11ty, but required: there is no server-side build step, so the committed output is what the `git pull`-based deploy serves).
 - `docs/hostinger-setup.md` — one-time hPanel setup runbook (Git deploy, PHP version, token config, cron job).
 
-`styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, and `logo.png` are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
+`styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, and the logo/favicon variants are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
 
 ## How data flows (the important part)
 
