@@ -21,9 +21,9 @@ Connection details are in the gitignored `.env`. See CLAUDE.md "Deploying to Hos
 | 3 | Meta description + Open Graph/Twitter | **Done** (2026-07-13) | P1 |
 | 4 | Cross-domain canonical | **Done** (2026-07-13) | P1 |
 | 5 | `sitemap.xml` + `robots.txt` | **Done** (2026-07-13) | P1 |
-| 6 | Person/ProfilePage JSON-LD | Not started | P1 |
-| 7 | Optimize logo image | Not started | P2 |
-| 8 | Font-loading polish | Not started | P2 |
+| 6 | Person/ProfilePage JSON-LD | **Done** (2026-07-13) | P1 |
+| 7 | Optimize logo image | **Done** (2026-07-13) | P2 |
+| 8 | Font-loading polish | **Done** (2026-07-13) | P2 |
 | 9 | Google Search Console submit | Not started (Felipe) | P1 |
 | 10 | Per-language `lang` + hreflang | **Done** (2026-07-13, with language selector) | P2 |
 
@@ -166,7 +166,14 @@ return 200; the sitemap lists exactly the four canonical pages, all 200.
 
 ---
 
-## Task 6 — Person / ProfilePage JSON-LD
+## Task 6 — Person / ProfilePage JSON-LD — Done (2026-07-13)
+
+`layout.njk` renders a `Person` JSON-LD block gated on a `personSchema: true`
+front-matter flag, set only on the two home pages (`src/index.md`,
+`src/en/index.md`) so the entity appears once per language, not on every page.
+Facts are on-record only: jobTitle "Engineer and independent researcher",
+`alumniOf` UPM, `knowsAbout` numerical simulation + software engineering.
+`sameAs`: GitHub, LinkedIn (`in/fcarvajalbrown`), ORCID `0000-0002-8300-7587`.
 
 **Priority:** P1. **Why:** Structured data for E-E-A-T, author identity, and
 Knowledge Panel eligibility.
@@ -198,7 +205,17 @@ Do not invent profile URLs.
 
 ---
 
-## Task 7 — Optimize the logo image
+## Task 7 — Optimize the logo image — Done (2026-07-13)
+
+`scripts/gen-logo-assets.js` (uses `sharp`, added as a devDependency) generates
+from the 906x1000 ~140 KB `src/logo.png`: `logo-nav.png` (4.4 KB) +
+`logo-nav.webp` (2.1 KB) at 2x the 29x32 nav box, `favicon-32.png` (1.7 KB,
+transparent so it adapts to the tab background like the original), and
+`apple-touch-icon.png` (16 KB, opaque brand-dark bg for iOS). `layout.njk` nav
+uses a `<picture>` with WebP + PNG fallback keeping `width`/`height` (no layout
+shift); favicon + apple-touch `<link>`s point at the small assets. The unused
+140 KB `logo.png` is no longer passthrough-copied. Re-run the script after
+changing the source logo.
 
 **Priority:** P2. **Why:** `src/logo.png` is 906x1000, ~140 KB, but displays at
 32 px in the nav and as a favicon. Large download on every page.
@@ -216,7 +233,12 @@ no layout shift.
 
 ---
 
-## Task 8 — Font-loading polish
+## Task 8 — Font-loading polish — Done (2026-07-13)
+
+`preconnect` (googleapis + gstatic) and `&display=swap` were already present, so
+no render-blocking hack was warranted. The one real win: the Inter request asked
+for weight 300, which the CSS never uses (only 400/500/600/700). Dropped 300 from
+the Google Fonts URL in `layout.njk`, removing one font file from every page load.
 
 **Priority:** P2. **Why:** Minor render-blocking reduction. `&display=swap` and
 `preconnect` are already present, so this is optional.

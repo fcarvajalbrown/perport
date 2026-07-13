@@ -4,6 +4,7 @@ title: Home
 description: "Felipe Carvajal Brown: engineer, researcher, and writer in Santiago, Chile. M.Sc. in Numerical Simulation (UPM). Software, simulation, and writing."
 lang: en
 bodyClass: page-editorial
+personSchema: true
 permalink: /en/
 altUrl: /
 hreflangEs: /

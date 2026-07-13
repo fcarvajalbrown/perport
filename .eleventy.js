@@ -24,7 +24,10 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
   eleventyConfig.addPassthroughCopy({ "src/refresh.php": "refresh.php" });
   eleventyConfig.addPassthroughCopy({ "src/gh_config.sample.php": "gh_config.sample.php" });
-  eleventyConfig.addPassthroughCopy({ "src/logo.png": "logo.png" });
+  eleventyConfig.addPassthroughCopy({ "src/logo-nav.png": "logo-nav.png" });
+  eleventyConfig.addPassthroughCopy({ "src/logo-nav.webp": "logo-nav.webp" });
+  eleventyConfig.addPassthroughCopy({ "src/favicon-32.png": "favicon-32.png" });
+  eleventyConfig.addPassthroughCopy({ "src/apple-touch-icon.png": "apple-touch-icon.png" });
   eleventyConfig.addPassthroughCopy({ "src/og-image.png": "og-image.png" });
   eleventyConfig.addPassthroughCopy({ "src/.htaccess": ".htaccess" });
   eleventyConfig.addPassthroughCopy({ "src/robots.txt": "robots.txt" });

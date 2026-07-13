@@ -22,7 +22,8 @@
     {% if description %}<meta name="twitter:description" content="{{ description }}">{% endif %}
     <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
     <link rel="canonical" href="https://fcarvajalbrown.com{{ page.url }}">
-    <link rel="icon" type="image/png" href="{{ '/logo.png' | bust }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/favicon-32.png' | bust }}">
+    <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | bust }}">
     <link rel="stylesheet" href="{{ '/styles.css' | bust }}">
     {% if hreflangEs and hreflangEn %}
     <link rel="alternate" hreflang="es" href="https://fcarvajalbrown.com{{ hreflangEs }}">
@@ -31,13 +32,34 @@
     {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% if personSchema %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Felipe Carvajal Brown",
+      "jobTitle": "Engineer and independent researcher",
+      "alumniOf": "Universidad Politécnica de Madrid",
+      "knowsAbout": ["Numerical simulation", "Software engineering"],
+      "url": "https://fcarvajalbrown.com",
+      "sameAs": [
+        "https://github.com/fcarvajalbrown",
+        "https://www.linkedin.com/in/fcarvajalbrown/",
+        "https://orcid.org/0000-0002-8300-7587"
+      ]
+    }
+    </script>
+    {% endif %}
 </head>
 <body class="{{ bodyClass }}">
     <nav class="site-nav">
         <div class="site-nav-inner">
             <a class="site-nav-brand" href="{{ L.nav[0].url }}" aria-label="{{ L.nav[0].label }}, Felipe Carvajal Brown">
-                <img src="{{ '/logo.png' | bust }}" alt="" class="site-nav-logo" width="29" height="32" />
+                <picture>
+                    <source srcset="{{ '/logo-nav.webp' | bust }}" type="image/webp">
+                    <img src="{{ '/logo-nav.png' | bust }}" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
                 <span class="site-nav-name">Felipe Carvajal Brown</span>
             </a>
             <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
