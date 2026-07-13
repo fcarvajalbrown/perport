@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## HARD RULE: humanize ALL user-facing text BEFORE writing it
+
+**Any text a visitor can read — page copy, headlines, ledes, taglines, nav labels, button text, alt text, meta titles, error/empty states, footer, ANY microcopy — MUST pass the AI-tell / humanizer scrub BEFORE it is written into a file. Not after. Not "later." Before.**
+
+This is non-negotiable and overrides momentum on any other task. If you are about to write or edit a string that renders on the site, stop and run the scrub first:
+
+- **No em-dash (—) as an inciso or rhythm crutch.** Anywhere in prose. Use a period, comma, colon, or middot (·) for separators. The em-dash is treated here as an AI-writing indicator, full stop. (Loading placeholders like the `—` glyph in the stat spans are not prose and are exempt.)
+- **No AI muletillas / vocabulary tells:** "delve", "leverage", "seamless/sin fisuras", "robust/robusto", "multifaceted", "it's worth noting", "in today's ... landscape", "the seam between", "the words that hold them together", negation-parallelism ("not just X, it's Y") used as a crutch, and the Spanish equivalents in the global CLAUDE.md checklist.
+- **Vary sentence length and rhythm.** No uniform, symmetrical, over-polished cadence.
+- **Only real facts.** Never invent bio details, dates, numbers, employers, or claims. Use only what Felipe has stated or what is verifiable.
+
+The full checklist lives in the global `~/.claude/CLAUDE.md` ("AI-tell checklist" and "Final pass" sections) and applies here in full. When in doubt, invoke the article-humanizer / voz-de-felipe skills. Shipping AI-tell copy to the live site is a failure of this project's most basic standard — do not do it.
+
 ## What this is
 
 A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The primary deployment is a Hostinger Business shared-hosting account; a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
