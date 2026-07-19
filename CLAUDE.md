@@ -17,7 +17,7 @@ The full checklist lives in the global `~/.claude/CLAUDE.md` ("AI-tell checklist
 
 ## What this is
 
-A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The primary deployment is a Hostinger Business shared-hosting account; a GitHub Pages deployment at `https://fcarvajalbrown.github.io/perport/` is kept as a backup. Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
+A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Eleventy (11ty)**. The site is deployed on a Hostinger Business shared-hosting account. (There is no longer a GitHub Pages deployment: Pages was disabled because its built-in Jekyll builder failed on every push to an Eleventy site; the site is Hostinger-only now.) Eleventy compiles `src/` into `_site/` at build time; the **build runs locally only** (Hostinger shared hosting has no general-purpose Node CLI runtime), so the deployed artifact is still plain static files. There is **a local build step but no test suite** (verification is manual — see below).
 
 The four pages (nav order Home / Writing / Portfolio / Works):
 - `/` — Home/About landing (editorial: serif-italic headline, warm accent `#d9a55c`).
@@ -45,7 +45,7 @@ The source tree:
 The site shows GitHub data via a **snapshot-first model with a live-API fallback**:
 
 1. **Primary path (Hostinger) — `data.json` refreshed by `refresh.php`.** An hPanel cron job runs `refresh.php` every hour (`0 * * * *`, UTC). It fetches the profile and all repos from the GitHub API (authenticated with a fine-grained PAT when `gh_config.php` is present, otherwise unauthenticated), filters out forks and the `perport` repo, and atomically overwrites `data.json` in `public_html`. The browser fetches that static file (cache-busted, `no-store`) on load — no GitHub API calls from visitors.
-2. **Backup path (GitHub Pages) — live API.** Pages does not run `refresh.php` (there is no cron there) and `data.json` is intentionally untracked, so on Pages `script.js` always falls back to the original client-side GitHub API calls (`fetchProfile` + paginated `loadMoreRepos`). Keep this fallback working when editing `script.js`.
+2. **Fallback path — live API.** When no `data.json` is present, `script.js` falls back to the original client-side GitHub API calls (`fetchProfile` + paginated `loadMoreRepos`). Keep this fallback working when editing `script.js`; it's the path used in local dev (no cron there) and any environment without a refreshed snapshot.
 3. **Local dev — live API**, same reason as (2): no `data.json` present unless you run `refresh.php` locally.
 
 `loadSnapshot()` decides which path is taken and sets the `usingSnapshot` flag; the `IntersectionObserver` and init block in `script.js` branch on it. In snapshot mode all repos are already in memory and infinite scroll just slices `allRepos`; in fallback mode each scroll fetches one API page.
@@ -90,7 +90,7 @@ To exercise the snapshot path locally: build first, then run `C:\Users\Beetlejui
 
 ## Working with git here
 
-The local working copy may not start as a git repo, and SSH keys may not be loaded in the tool shell. Use `gh auth setup-git` and the HTTPS remote (`https://github.com/fcarvajalbrown/perport.git`). The default branch is `master`. GitHub Pages deploys from it automatically as the backup.
+The local working copy may not start as a git repo, and SSH keys may not be loaded in the tool shell. Use `gh auth setup-git` and the HTTPS remote (`https://github.com/fcarvajalbrown/perport.git`). The default branch is `master`.
 
 ## Deploying to Hostinger
 
