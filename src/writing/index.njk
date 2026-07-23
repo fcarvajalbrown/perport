@@ -33,6 +33,7 @@ altUrl: /en/
         {% for e in collections.escrito | reverse %}
         <li class="escrito-card" data-type="{{ e.data.type }}" data-topics="{{ e.data.topics | join(' ') }}">
             <a class="escrito-card-link" href="{{ e.url }}">
+                {% if e.data.cover %}<img class="escrito-card-cover" src="{{ e.data.cover }}" alt="" loading="lazy" width="1200" height="675" />{% endif %}
                 <span class="escrito-card-eyebrow">{{ tax.tipos[e.data.type].singular }}{% if e.data.medium %} · {{ e.data.medium }}{% endif %}</span>
                 <span class="escrito-card-title">{{ e.data.title }}</span>
                 <time class="escrito-card-date" datetime="{{ e.date | isoDate }}">{{ e.date | fechaLarga }}</time>

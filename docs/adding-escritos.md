@@ -41,6 +41,12 @@ says go) deploy per the "Deploying to Hostinger" section of the root `CLAUDE.md`
   "teléfono" inside body prose is fine; a `RUT:`/`Teléfono:` line is not).
 - **Flattens** markdown citation links `[texto](url)` -> `texto` for a clean read
   (matches the plain style of the rest of the archive).
+- **LinkedIn scaffolding:** strips the trailing `@mentions` line, the `#hashtags`
+  line, and the caption after them (real `##` subheadings are kept).
+- **Cover image (artículos):** auto-detects `cover.png` in the source folder,
+  optimizes it to webp (1200px wide, ~20KB) at `src/writing/covers/<date>-<slug>.webp`,
+  and adds `cover:` to the front matter. Pass `--cover <path>` to point elsewhere,
+  or `--no-cover` to skip. Needs `sharp` (already a dependency).
 
 The one thing the script does NOT decide is **topics** — that is the editorial
 call, so `--topics` is required.

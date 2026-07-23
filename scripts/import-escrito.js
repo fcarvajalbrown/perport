@@ -28,9 +28,17 @@
  *   --date <YYYY-MM-DD> (optional) override the inferred date
  *   --slug <slug>       (optional) override the inferred URL slug
  *   --medium "<m>"      (optional) where it ran (only if actually published)
+ *   --cover <path>      (optional) cover image; for articulos, auto-detected
+ *                       from the source folder (cover.png) if not given
+ *   --no-cover          (optional) skip the cover even if one is present
  *   --out <dir>         (optional) output dir (default: src/writing/posts)
  *   --force             (optional) overwrite an existing output file
  *   --dry               (optional) print what would be written, write nothing
+ *
+ * Covers are optimized to webp (via sharp, resized to 1200px wide) and written
+ * to src/writing/covers/<date>-<slug>.webp; the front matter gets `cover:` with
+ * the public path. sharp is optional: without it, cartas/columnas import fine
+ * and an articulo just imports without its cover.
  */
 
 const fs = require("fs");
@@ -124,6 +132,15 @@ function cleanBody(body) {
     if (!removedH1 && /^#\s+/.test(l)) { removedH1 = true; return false; }
     return true;
   });
+  // Cut LinkedIn post scaffolding: everything from the first @mentions line or
+  // #hashtags line on (that block also trails a caption we do not want). A
+  // "#hashtag" line starts with # then a non-space, non-# char, which does NOT
+  // match a `# ` H1 or `## ` H2 heading, so real subheadings are preserved.
+  const scaffoldIdx = lines.findIndex(function (l) {
+    const t = l.trim();
+    return /^@\S/.test(t) || /^#[^\s#]/.test(t);
+  });
+  if (scaffoldIdx !== -1) lines = lines.slice(0, scaffoldIdx);
   // Cut the signature block: everything from the "Felipe Carvajal Brown" line on.
   const sigIdx = lines.findIndex(function (l) { return /^Felipe Carvajal Brown\s*$/.test(l.trim()); });
   if (sigIdx !== -1) lines = lines.slice(0, sigIdx);
@@ -141,7 +158,8 @@ function inferTitle(type, data, body) {
     return t.replace(/^Carta:\s*/i, "").trim();
   }
   if (type === "articulo") {
-    return (data.seo_title || firstH1(body) || "").trim();
+    // Prefer the article's own H1 headline; fall back to seo_title if none.
+    return (firstH1(body) || data.seo_title || "").trim();
   }
   // columna
   return (firstH1(body) || "").trim();
@@ -158,7 +176,35 @@ function yamlString(s) {
   return '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
 }
 
-function main() {
+// Find a cover image next to the source (LinkedIn folders hold cover.png).
+function findCover(source) {
+  const dir = path.dirname(source);
+  const preferred = path.join(dir, "cover.png");
+  if (fs.existsSync(preferred)) return preferred;
+  const png = fs.readdirSync(dir).find(function (f) { return /\.png$/i.test(f); });
+  return png ? path.join(dir, png) : null;
+}
+
+// Optimize a cover to webp under coversDir; return its public path, or null.
+async function makeCover(coverSrc, coversDir, outStem, dry) {
+  let sharp;
+  try {
+    sharp = require("sharp");
+  } catch (e) {
+    console.warn("import-escrito: sharp not available, skipping cover " + coverSrc);
+    return null;
+  }
+  const publicPath = "/writing/covers/" + outStem + ".webp";
+  if (dry) return publicPath;
+  fs.mkdirSync(coversDir, { recursive: true });
+  await sharp(coverSrc)
+    .resize({ width: 1200, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toFile(path.join(coversDir, outStem + ".webp"));
+  return publicPath;
+}
+
+async function main() {
   const args = parseArgs(process.argv);
   const source = args.source;
   const type = args.type;
@@ -187,8 +233,22 @@ function main() {
   if (!body) fail("empty body after cleaning; check the source file");
 
   const outDir = (args.out && args.out !== true) ? args.out : path.join("src", "writing", "posts");
-  const outName = date + "-" + slug + ".md";
+  const outStem = date + "-" + slug;
+  const outName = outStem + ".md";
   const outPath = path.join(outDir, outName);
+
+  // Resolve a cover: explicit --cover, else auto-detect for articulos. --no-cover disables.
+  let coverSrc = null;
+  if (!args["no-cover"]) {
+    if (args.cover && args.cover !== true) coverSrc = args.cover;
+    else if (type === "articulo") coverSrc = findCover(source);
+  }
+  const coversDir = path.join("src", "writing", "covers");
+  let coverPublic = null;
+  if (coverSrc) {
+    if (!fs.existsSync(coverSrc)) fail("cover not found: " + coverSrc);
+    coverPublic = await makeCover(coverSrc, coversDir, outStem, args.dry);
+  }
 
   let fm = "---\n";
   fm += "title: " + yamlString(title) + "\n";
@@ -196,6 +256,7 @@ function main() {
   fm += "type: " + type + "\n";
   fm += "topics: [" + topics.join(", ") + "]\n";
   if (args.medium && args.medium !== true) fm += "medium: " + yamlString(args.medium) + "\n";
+  if (coverPublic) fm += "cover: " + coverPublic + "\n";
   fm += "---\n\n";
   const out = fm + body + "\n";
 
@@ -209,7 +270,7 @@ function main() {
   }
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(outPath, out, "utf8");
-  console.log("wrote " + outPath + "  [" + type + " | " + date + " | " + topics.join(",") + "]");
+  console.log("wrote " + outPath + "  [" + type + " | " + date + " | " + topics.join(",") + (coverPublic ? " | +cover" : "") + "]");
 }
 
-main();
+main().catch(function (e) { fail(e.message); });

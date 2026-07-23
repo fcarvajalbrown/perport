@@ -4,6 +4,7 @@ bodyClass: page-editorial
 ---
 <article class="escrito">
     <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    {% if cover %}<img class="escrito-cover" src="{{ cover }}" alt="" width="1200" height="675" />{% endif %}
     <p class="escrito-eyebrow">{{ tax.tipos[type].singular }}{% if medium %} · {{ medium }}{% endif %}</p>
     <h1 class="escrito-title">{{ title }}</h1>
     <p class="escrito-date"><time datetime="{{ page.date | isoDate }}">{{ page.date | fechaLarga }}</time></p>
