@@ -1,0 +1,45 @@
+---
+layout: layout.njk
+title: Escritos
+description: "Cartas al director, columnas y artículos de Felipe Carvajal Brown sobre tecnología, trabajo y lo público. Filtra por tema o por tipo."
+lang: es
+bodyClass: page-editorial
+altUrl: /en/
+---
+<div class="editorial-body escritos">
+    <p class="editorial-eyebrow">Escritos</p>
+    <h1 class="editorial-title">Cartas, columnas y <em>artículos</em>.</h1>
+    <p class="editorial-lede">Textos sobre tecnología, trabajo y lo público. Filtra por tema o por tipo.</p>
+
+    <div class="escritos-filter" id="escritos-filter">
+        <div class="filter-group filter-topics" role="group" aria-label="Filtrar por tema">
+            <button class="chip chip-topic is-active" data-topic="all" type="button">Todos</button>
+            {% for t in tax.topics %}
+            <button class="chip chip-topic" data-topic="{{ t.slug }}" type="button">{{ t.label }}</button>
+            {% endfor %}
+        </div>
+        <div class="filter-group filter-types" role="group" aria-label="Filtrar por tipo">
+            <button class="chip chip-type is-active" data-type="all" type="button">Todas</button>
+            <button class="chip chip-type" data-type="carta" type="button">Cartas</button>
+            <button class="chip chip-type" data-type="columna" type="button">Columnas</button>
+            <button class="chip chip-type" data-type="articulo" type="button">Artículos</button>
+        </div>
+        <p class="escritos-count" id="escritos-count" aria-live="polite"></p>
+    </div>
+
+    <ul class="escritos-list" id="escritos-list">
+        {% for e in collections.escrito | reverse %}
+        <li class="escrito-card" data-type="{{ e.data.type }}" data-topics="{{ e.data.topics | join(' ') }}">
+            <a class="escrito-card-link" href="{{ e.url }}">
+                <span class="escrito-card-eyebrow">{{ tax.tipos[e.data.type].singular }}{% if e.data.medium %} · {{ e.data.medium }}{% endif %}</span>
+                <span class="escrito-card-title">{{ e.data.title }}</span>
+                <time class="escrito-card-date" datetime="{{ e.date | isoDate }}">{{ e.date | fechaLarga }}</time>
+                <span class="escrito-card-topics">
+                    {% for t in e.data.topics %}<span class="topic-chip">{{ tax.labelOf[t] }}</span>{% endfor %}
+                </span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <p class="escritos-empty" id="escritos-empty" hidden>No hay escritos con esa combinación. Prueba con otro tema o tipo.</p>
+</div>
