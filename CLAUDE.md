@@ -32,10 +32,10 @@ The source tree:
 - `src/portfolio/index.html` — the repo grid + hero + modal, all rendered server-side at build from the `repos` data (see "How the portfolio data flows"). `src/en/portfolio/index.html` is the English mirror.
 - `src/_data/repos.js` — build-time GitHub fetch that feeds the portfolio (`repos.profile`, `repos.repos`).
 - `src/avatar.webp` — self-hosted profile avatar (regenerate with `scripts/gen-avatar.js`).
-- `src/script.js` — portfolio hydration only (tilt, modal, on-demand README). Loaded only on `/portfolio/`; does not fetch repo data.
+- `src/script.js` — portfolio hydration (tilt, modal, on-demand README) + a daily non-blocking background refresh from `/data.json`. Loaded only on `/portfolio/`.
 - `src/styles.css` — all styling, CSS custom properties in `:root` (dark theme). `.page-editorial` overrides `--accent` to `#d9a55c`; `.page-portfolio` keeps amber.
 - `src/logo.png` — full-resolution spade-skull brand mark; the source image for the small nav/favicon variants, not served directly. `scripts/gen-logo-assets.js` (uses `sharp`) regenerates `src/logo-nav.png`, `src/logo-nav.webp`, `src/favicon-32.png`, and `src/apple-touch-icon.png` from it; the layout references those, not `logo.png`.
-- `src/refresh.php`, `src/gh_config.sample.php` — **legacy** (the old server-side `data.json` snapshot pipeline; no longer used by the page, see "Legacy" below).
+- `src/refresh.php` — PHP CLI script (hPanel daily cron) that writes the trimmed `data.json` the portfolio background-refreshes from (see "`data.json` + the daily cron"). `src/gh_config.sample.php` — optional token config template it reads.
 - `.eleventy.js` — 11ty config: input `src`, output `_site`, the `bust` cache-busting filter, the `fechaLarga`/`isoDate`/`hasType`/`json` filters, and passthrough copies for `styles.css`, `script.js`, `escritos.js`, `avatar.webp`, the Escritos `writing/covers/`, `og-image.png`, `.htaccess`, `robots.txt`, and the logo/favicon variants.
 - `_site/` — **build output, committed to git** (unusual for 11ty, but required: there is no server-side build step, so the committed output is what the `git pull`-based deploy serves).
 - `docs/hostinger-setup.md` — one-time hPanel setup runbook (Git deploy, PHP version, token config, cron job).
@@ -83,26 +83,28 @@ per-visitor GitHub fetch and no `data.json` on the critical path.
    card carries its trimmed repo object in a `data-repo` attribute (via the `json`
    filter + `escape`), so the page HTML is complete and indexable — no "loading"
    state.
-3. **`src/script.js` only hydrates** the pre-rendered cards: 3D tilt, the detail
-   modal, and an on-demand README fetch (the one and only live GitHub call, made
-   just when a card is opened). It does **not** fetch repo data or `data.json`.
+3. **`src/script.js` hydrates + daily background-refreshes.** It wires up the
+   baked cards (3D tilt, detail modal, on-demand README fetch) immediately, then
+   fetches `/data.json` **after paint** (non-blocking, HTTP-cached 6h) and
+   updates the cards/profile in place. So first paint and SEO come from the baked
+   HTML; the daily snapshot keeps stars/times/new repos current between deploys.
 4. **The avatar is self-hosted** at `src/avatar.webp` (regenerate with
    `node scripts/gen-avatar.js` when the GitHub avatar changes) and referenced
    directly in the HTML, so it paints instantly instead of following a
    `github.com` → avatars-CDN redirect.
 
-**Freshness is deploy-time:** repos refresh whenever the site is rebuilt and
-deployed. Rebuild to update.
+**Freshness:** baked at each deploy, plus a once-a-day background refresh.
 
-### Legacy: `refresh.php` / `data.json` / the hourly cron
+### `data.json` + the daily cron (background refresh)
 
-The old model fetched a server-side `data.json` snapshot (refreshed by an hPanel
-cron running `refresh.php`) that the browser downloaded on every load. **The page
-no longer uses this** — `refresh.php`, `gh_config.sample.php`, and the `data.json`
-cache rule in `.htaccess` remain only as legacy and can be removed. The hPanel
-cron (if still configured) writes a `data.json` nothing reads; disable it in
-hPanel's Cron Jobs UI if you want. Note the shared host has no `crontab` binary,
-so crons are managed only through hPanel's UI, not SSH.
+`src/refresh.php` (PHP, CLI-only) fetches GitHub and writes `data.json` in the
+**exact same trimmed shape** as `repos.js` (keep the two in sync: the `EXCLUDE`
+list and `LANG_COLORS` map are duplicated in both). An **hPanel cron runs it once
+a day** — `php ~/domains/fcarvajalbrown.com/repo/_site/refresh.php`. `data.json`
+is gitignored and server-only (28KB); `.htaccess` caches it 6h. The shared host
+has **no `crontab` binary**, so this cron is managed only in hPanel's Cron Jobs
+UI, not over SSH. `refresh.php` writes atomically (`data.json.tmp` → `rename`) and
+leaves the old file untouched on any API error.
 
 ## Running it locally
 
