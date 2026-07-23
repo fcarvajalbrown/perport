@@ -1,0 +1,101 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
+    <title>Lo que Synco soñó, y lo que mi alcalde no contestó · Felipe Carvajal Brown</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Felipe Carvajal Brown">
+    <meta property="og:title" content="Lo que Synco soñó, y lo que mi alcalde no contestó · Felipe Carvajal Brown">
+    
+    <meta property="og:url" content="https://fcarvajalbrown.com/writing/synco-y-mi-alcalde/">
+    <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Felipe Carvajal Brown">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lo que Synco soñó, y lo que mi alcalde no contestó · Felipe Carvajal Brown">
+    
+    <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
+    <link rel="canonical" href="https://fcarvajalbrown.com/writing/synco-y-mi-alcalde/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
+    <link rel="stylesheet" href="/styles.css?v=05f9b2e5">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="page-editorial">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/" aria-label="Inicio, Felipe Carvajal Brown">
+                <picture>
+                    <source srcset="/logo-nav.webp?v=bee9b98d" type="image/webp">
+                    <img src="/logo-nav.png?v=934a7fd9" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/">Inicio</a></li>
+                
+                <li><a href="/writing/">Escritos</a></li>
+                
+                <li><a href="/portfolio/">Portafolio</a></li>
+                
+                <li><a href="/works/">Obras</a></li>
+                
+                <li><a class="site-nav-lang" href="/" title="View in English">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <p class="escrito-eyebrow">Columna</p>
+    <h1 class="escrito-title">Lo que Synco soñó, y lo que mi alcalde no contestó</h1>
+    <p class="escrito-date"><time datetime="2026-07-05">5 de julio de 2026</time></p>
+    
+    <ul class="escrito-topics">
+        <li class="topic-chip">GovTech, datos y transparencia</li><li class="topic-chip">Política y partidos</li>
+    </ul>
+    
+    <div class="escrito-body">
+        <p>A fines de 2023 entré a una sala en el Centro Cultural La Moneda y me quedé parado ahí más tiempo del que debería. Era la reconstrucción íntegra de la sala de operaciones del Proyecto Synco, el &quot;Cybersyn&quot; que Salvador Allende encargó entre 1971 y 1973: sillas hexagonales, pantallas de control, un cuarto pensado para que el Estado viera, en tiempo real, cómo latía la economía del país. Lo armaron el cibernético británico Stafford Beer, Fernando Flores y Raúl Espejo, coordinados desde INTEC y la CORFO. El golpe de 1973 lo interrumpió antes de que operara completo. Cincuenta años después, un equipo de la Universidad Católica y el MIT lo reconstruyó pieza por pieza para esa muestra. Yo no fui a verla como turista. Fui porque construyo software para vivir, y esa sala era la versión más ambiciosa que ha existido de mi propio oficio puesto al servicio del Estado.</p>
+<p>Medio siglo después de Synco, yo también uso mi tiempo libre para eso, a una escala infinitamente más chica. El 10 de marzo de este año, la semana exacta en que José Antonio Kast asumió la presidencia, corrí un <em>scanner</em> que escribí yo mismo sobre los 345 sitios web de las municipalidades de Chile. No hackeé nada: la verificación es un <em>TCP connect</em> al puerto 3306, el que usa MySQL. Si el municipio responde ahí, cualquiera con un computador puede intentar conectarse a los registros de contribuyentes, trámites y datos personales de sus vecinos. 82 municipios, el 24% del total, respondieron. 50 operan sin SSL válido. 7 corren PHP 5.x, sin parches desde diciembre de 2018. 221 tienen su panel de administración, cPanel, abierto a internet. Entre los expuestos hay comunas grandes, como Viña del Mar, La Serena y Antofagasta: esto no es un problema exótico de algún municipio chico sin plata. Es sistémico. Publiqué el código y los datos crudos para que cualquiera lo repita.</p>
+<p>La Ley 21.663, promulgada en abril de 2024, obliga a los municipios, entre otros organismos, a prevenir y reportar estos incidentes desde el 1 de marzo de 2025, con multas de hasta 20 mil UTM y 40 mil para los servicios más críticos. La Agencia Nacional de Ciberseguridad opera desde el 2 de enero de 2025 con la facultad de exigir esa misma evidencia y sancionar. Dieciocho meses después, la agencia no ha publicado un reporte público de cumplimiento municipal. Un ingeniero solo, de noche, en su tiempo libre, entregó ese diagnóstico antes que el propio regulador.</p>
+<p>No me quedé en publicarlo. Construí otra herramienta, MuniANSI, pensada para que cualquier municipio revise su propio cumplimiento de esa misma ley, y se la ofrecí a la mía: Ñuñoa, donde vivo y donde milito. El alcalde es Sebastián Sichel, de derecha, electo por menos de mil doscientos votos en octubre de 2024. El 19 de marzo de este año me escribió una trabajadora social del Gabinete de Alcaldía: había que sostener primero una reunión previa, el 26 de marzo a las once de la mañana, en las dependencias municipales de Jorge Washington 107, para &quot;canalizar&quot; mi requerimiento antes de evaluar si correspondía una audiencia con el alcalde, &quot;considerando que su agenda se encuentra copada&quot;. El último contacto fue el 26 de junio. Después, nada.</p>
+<p>Synco quiso coordinar en tiempo real la economía completa de un país. Lo mío es mucho más modesto: saber si la base de datos de tu comuna está abierta a cualquiera con un navegador, gratis, y avisarle a tiempo a quien la administra. Synco no llegó a operar porque un golpe de Estado la interrumpió en 1973. A mi oferta no la interrumpió ningún golpe. La interrumpió una agenda copada.</p>
+<p>El código sigue publicado, gratis, esperando. Ojalá algún alcalde, de cualquier color, tenga tiempo para leerlo.</p>
+
+    </div>
+</article>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago de Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>

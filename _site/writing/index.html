@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
     <title>Escritos · Felipe Carvajal Brown</title>
-    <meta name="description" content="Ensayos, columnas y notas de Felipe Carvajal Brown. El archivo está en construcción; pronto aparecerán aquí los textos publicados.">
+    <meta name="description" content="Cartas al director, columnas y artículos de Felipe Carvajal Brown sobre tecnología, trabajo y lo público. Filtra por tema o por tipo.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Felipe Carvajal Brown">
     <meta property="og:title" content="Escritos · Felipe Carvajal Brown">
-    <meta property="og:description" content="Ensayos, columnas y notas de Felipe Carvajal Brown. El archivo está en construcción; pronto aparecerán aquí los textos publicados.">
+    <meta property="og:description" content="Cartas al director, columnas y artículos de Felipe Carvajal Brown sobre tecnología, trabajo y lo público. Filtra por tema o por tipo.">
     <meta property="og:url" content="https://fcarvajalbrown.com/writing/">
     <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -20,12 +20,12 @@
     <meta property="og:locale" content="es_ES">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Escritos · Felipe Carvajal Brown">
-    <meta name="twitter:description" content="Ensayos, columnas y notas de Felipe Carvajal Brown. El archivo está en construcción; pronto aparecerán aquí los textos publicados.">
+    <meta name="twitter:description" content="Cartas al director, columnas y artículos de Felipe Carvajal Brown sobre tecnología, trabajo y lo público. Filtra por tema o por tipo.">
     <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
     <link rel="canonical" href="https://fcarvajalbrown.com/writing/">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
-    <link rel="stylesheet" href="/styles.css?v=f79184c2">
+    <link rel="stylesheet" href="/styles.css?v=05f9b2e5">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,11 +60,729 @@
         </div>
     </nav>
 
-    <div class="editorial-body">
+    <div class="editorial-body escritos">
     <p class="editorial-eyebrow">Escritos</p>
-    <h1 class="editorial-title">Ensayos, columnas y <em>notas</em>.</h1>
-    <p class="editorial-lede">Este archivo está en construcción. Pronto aparecerán aquí los textos publicados.</p>
+    <h1 class="editorial-title">Cartas, columnas y <em>artículos</em>.</h1>
+    <p class="editorial-lede">Textos sobre tecnología, trabajo y lo público. Filtra por tema o por tipo.</p>
+
+    <div class="escritos-filter" id="escritos-filter">
+        <div class="filter-group filter-topics" role="group" aria-label="Filtrar por tema">
+            <button class="chip chip-topic is-active" data-topic="all" type="button">Todos</button>
+            
+            <button class="chip chip-topic" data-topic="ia" type="button">Inteligencia Artificial</button>
+            
+            <button class="chip chip-topic" data-topic="trabajo" type="button">Trabajo y empleo</button>
+            
+            <button class="chip chip-topic" data-topic="economia" type="button">Economía y fiscalidad</button>
+            
+            <button class="chip chip-topic" data-topic="software" type="button">Software e ingeniería</button>
+            
+            <button class="chip chip-topic" data-topic="govtech" type="button">GovTech, datos y transparencia</button>
+            
+            <button class="chip chip-topic" data-topic="ciudad" type="button">Vivienda, ciudad e infraestructura</button>
+            
+            <button class="chip chip-topic" data-topic="ciencia" type="button">Ciencia, medio ambiente y educación</button>
+            
+            <button class="chip chip-topic" data-topic="justicia" type="button">Justicia, derechos e instituciones</button>
+            
+            <button class="chip chip-topic" data-topic="politica" type="button">Política y partidos</button>
+            
+        </div>
+        <div class="filter-group filter-types" role="group" aria-label="Filtrar por tipo">
+            <button class="chip chip-type is-active" data-type="all" type="button">Todas</button>
+            
+            
+            <button class="chip chip-type" data-type="carta" type="button">Cartas</button>
+            
+            
+            
+            <button class="chip chip-type" data-type="columna" type="button">Columnas</button>
+            
+            
+            
+            
+        </div>
+        <p class="escritos-count" id="escritos-count" aria-live="polite"></p>
+    </div>
+
+    <ul class="escritos-list" id="escritos-list">
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad justicia">
+            <a class="escrito-card-link" href="/writing/querella-para-uno-oficio-para-otro/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Querella para El Olivar, oficio para Curauma</span>
+                <time class="escrito-card-date" datetime="2026-07-23">23 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span><span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad ciencia">
+            <a class="escrito-card-link" href="/writing/pronostico-funciono-modelo-no/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El pronóstico funcionó, el modelo no</span>
+                <time class="escrito-card-date" datetime="2026-07-23">23 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span><span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia politica">
+            <a class="escrito-card-link" href="/writing/cuota-entrada-cuota-salida/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Cuota de entrada, cuota de salida</span>
+                <time class="escrito-card-date" datetime="2026-07-21">21 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span><span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/cordillera-sin-margen/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La cordillera sin margen</span>
+                <time class="escrito-card-date" datetime="2026-07-21">21 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/ciencia-gratis-recorte-2027/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Un motor con el nombre de un amigo</span>
+                <time class="escrito-card-date" datetime="2026-07-21">21 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="columna" data-topics="ia politica">
+            <a class="escrito-card-link" href="/writing/once-principios-maquina-estado/">
+                <span class="escrito-card-eyebrow">Columna</span>
+                <span class="escrito-card-title">Once principios para la máquina, ninguno para el Estado</span>
+                <time class="escrito-card-date" datetime="2026-07-17">17 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Inteligencia Artificial</span><span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ia justicia">
+            <a class="escrito-card-link" href="/writing/ley-ia-no-audita-al-estado/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La ley de IA no le pide cuentas al Estado</span>
+                <time class="escrito-card-date" datetime="2026-07-17">17 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Inteligencia Artificial</span><span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/supuesto-megarreforma/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El supuesto detrás de la megarreforma</span>
+                <time class="escrito-card-date" datetime="2026-07-16">16 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="govtech">
+            <a class="escrito-card-link" href="/writing/ley-ciberseguridad-municipal-sin-apoyo/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La ley de ciberseguridad municipal ya multa; el apoyo no llegó</span>
+                <time class="escrito-card-date" datetime="2026-07-16">16 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">GovTech, datos y transparencia</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/indice-taco-otan/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Cuando el mercado necesita un índice para predecir a un aliado</span>
+                <time class="escrito-card-date" datetime="2026-07-16">16 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad">
+            <a class="escrito-card-link" href="/writing/veredas-scooters-ciclovia-que-falta/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La vereda no se invade por gusto, se invade por falta de ciclovía</span>
+                <time class="escrito-card-date" datetime="2026-07-13">13 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad">
+            <a class="escrito-card-link" href="/writing/ley-uber-tres-anos-sin-reglamento/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Tres años sin reglamento para la Ley Uber</span>
+                <time class="escrito-card-date" datetime="2026-07-13">13 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad">
+            <a class="escrito-card-link" href="/writing/patrimonio-sin-recinto/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El patrimonio musical no tiene dónde tocar</span>
+                <time class="escrito-card-date" datetime="2026-07-12">12 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/lo-que-no-sale-en-la-portada/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Lo que no sale en la portada del PS</span>
+                <time class="escrito-card-date" datetime="2026-07-12">12 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/el-candado-que-si-cierra/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El candado que sí cierra contra las casas de apuestas</span>
+                <time class="escrito-card-date" datetime="2026-07-12">12 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="columna" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/cuarenta-personas-un-sabado/">
+                <span class="escrito-card-eyebrow">Columna</span>
+                <span class="escrito-card-title">Cuarenta personas un sábado a las diez</span>
+                <time class="escrito-card-date" datetime="2026-07-12">12 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/un-sistema-sin-margen/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Un sistema sin margen</span>
+                <time class="escrito-card-date" datetime="2026-07-10">10 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/un-magister-que-paga-la-mediana/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Un Magíster que paga la mediana</span>
+                <time class="escrito-card-date" datetime="2026-07-10">10 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="columna" data-topics="trabajo justicia">
+            <a class="escrito-card-link" href="/writing/tercerizacion-bc-tecnologia/">
+                <span class="escrito-card-eyebrow">Columna</span>
+                <span class="escrito-card-title">El Estado sabe nombrar el fraude laboral, pero se prohibió decirlo</span>
+                <time class="escrito-card-date" datetime="2026-07-09">9 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span><span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad">
+            <a class="escrito-card-link" href="/writing/megapuerto-el-modelo-manda/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El modelo manda, no el corte de cinta</span>
+                <time class="escrito-card-date" datetime="2026-07-09">9 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/indh-reforma-sin-cuoteo/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Reformar el INDH sin cambiarle solo el dueño</span>
+                <time class="escrito-card-date" datetime="2026-07-09">9 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="govtech">
+            <a class="escrito-card-link" href="/writing/cable-chino-seguridad-por-oscuridad/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La seguridad no se decreta con silencio</span>
+                <time class="escrito-card-date" datetime="2026-07-09">9 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">GovTech, datos y transparencia</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/partido-radical-escuela-de-la-camara/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Lo que la cámara enseña y ningún decreto disuelve</span>
+                <time class="escrito-card-date" datetime="2026-07-08">8 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="govtech ia">
+            <a class="escrito-card-link" href="/writing/ia-municipal-el-silencio-de-nunoa/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Le ofrecí IA gratis a mi comuna y nadie contestó</span>
+                <time class="escrito-card-date" datetime="2026-07-08">8 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">GovTech, datos y transparencia</span><span class="topic-chip">Inteligencia Artificial</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/tercerizacion-183-a/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Tercerización, cuando el &#39;servicio&#39; es en realidad empleo directo</span>
+                <time class="escrito-card-date" datetime="2026-07-07">7 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/articulo-161-despido/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El artículo 161 y la excusa de las &#39;necesidades de la empresa&#39;</span>
+                <time class="escrito-card-date" datetime="2026-07-07">7 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/prioridad-que-chile-repite/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La prioridad que Chile repite en educación</span>
+                <time class="escrito-card-date" datetime="2026-07-06">6 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia economia">
+            <a class="escrito-card-link" href="/writing/litio-velocidad-no-tasa/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">En litio, lo que perdimos es velocidad, no tasa</span>
+                <time class="escrito-card-date" datetime="2026-07-06">6 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span><span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/diagnostico-economico-equivocado/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Cobre y petróleo, no indemnizaciones</span>
+                <time class="escrito-card-date" datetime="2026-07-06">6 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="columna" data-topics="govtech politica">
+            <a class="escrito-card-link" href="/writing/synco-y-mi-alcalde/">
+                <span class="escrito-card-eyebrow">Columna</span>
+                <span class="escrito-card-title">Lo que Synco soñó, y lo que mi alcalde no contestó</span>
+                <time class="escrito-card-date" datetime="2026-07-05">5 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">GovTech, datos y transparencia</span><span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/promedio-que-no-es-gratis/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El promedio que no es gratis</span>
+                <time class="escrito-card-date" datetime="2026-07-05">5 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/impuesto-que-castiga-la-calidad/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El impuesto que castiga la calidad</span>
+                <time class="escrito-card-date" datetime="2026-07-05">5 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="columna" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/cuatro-de-julio-socialista/">
+                <span class="escrito-card-eyebrow">Columna</span>
+                <span class="escrito-card-title">Por qué celebro el 4 de julio siendo socialista</span>
+                <time class="escrito-card-date" datetime="2026-07-04">4 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia trabajo">
+            <a class="escrito-card-link" href="/writing/sala-cuna-de-donde-sale-la-plata/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Sala cuna: de dónde sale la plata</span>
+                <time class="escrito-card-date" datetime="2026-07-02">2 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span><span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/reconstruccion-la-variable-que-falta/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Plan de Reconstrucción: la variable que falta</span>
+                <time class="escrito-card-date" datetime="2026-07-02">2 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciudad">
+            <a class="escrito-card-link" href="/writing/la-meta-que-no-cierra-la-brecha/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La meta que no cierra la brecha</span>
+                <time class="escrito-card-date" datetime="2026-07-01">1 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Vivienda, ciudad e infraestructura</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/glaciares-agua-antes-que-metal/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El agua antes que el metal</span>
+                <time class="escrito-card-date" datetime="2026-07-01">1 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ciencia">
+            <a class="escrito-card-link" href="/writing/cuanto-de-ese-cielo-nos-toca/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Cuánto de ese cielo nos toca a nosotros</span>
+                <time class="escrito-card-date" datetime="2026-07-01">1 de julio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/recorte-parejo-sin-prioridades/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El 3% que no diferencia</span>
+                <time class="escrito-card-date" datetime="2026-06-30">30 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/reajuste-que-pierde-desde-manana/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El reajuste que pierde desde mañana</span>
+                <time class="escrito-card-date" datetime="2026-06-30">30 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/cuenta-julio-descuento-invisible/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La cuenta de julio y el descuento invisible</span>
+                <time class="escrito-card-date" datetime="2026-06-30">30 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/guerra-ajena-cuenta-propia/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La guerra ajena, la cuenta propia</span>
+                <time class="escrito-card-date" datetime="2026-06-26">26 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/estado-que-si-puede/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El Estado que sí puede</span>
+                <time class="escrito-card-date" datetime="2026-06-26">26 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/cobre-que-no-llega/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El cobre que no llega</span>
+                <time class="escrito-card-date" datetime="2026-06-26">26 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/el-empleo-que-no-llega-a-la-afp/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El empleo que no llega a la AFP</span>
+                <time class="escrito-card-date" datetime="2026-06-25">25 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/264-kmh-la-ley-que-no-alcanzo/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La ley que no alcanzó los 264 km/h</span>
+                <time class="escrito-card-date" datetime="2026-06-25">25 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/reincidencia-se-combate-con-salidas/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La reincidencia se combate con salidas</span>
+                <time class="escrito-card-date" datetime="2026-06-24">24 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/reconstruccion-deuda-vestida-de-inversion/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Reconstrucción con plata que no existe</span>
+                <time class="escrito-card-date" datetime="2026-06-24">24 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/deuda-que-sube-cuando-todo-sube/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La deuda que sube cuando todo sube</span>
+                <time class="escrito-card-date" datetime="2026-06-24">24 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/brexit-populismo-sin-programa/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El populismo sin programa no fracasa en las urnas</span>
+                <time class="escrito-card-date" datetime="2026-06-24">24 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia politica">
+            <a class="escrito-card-link" href="/writing/peru-fujimori-democracia-coherencia/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La democracia no le debe nada al fujimorismo</span>
+                <time class="escrito-card-date" datetime="2026-06-23">23 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span><span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="politica">
+            <a class="escrito-card-link" href="/writing/ley-reconstruccion-ppd-termometro/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El voto que mide la ley</span>
+                <time class="escrito-card-date" datetime="2026-06-23">23 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Política y partidos</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/informalidad-laboral-deficit-del-sistema/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Informalidad laboral: el déficit que ya se puede calcular</span>
+                <time class="escrito-card-date" datetime="2026-06-23">23 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="trabajo">
+            <a class="escrito-card-link" href="/writing/dt-negociacion-colectiva-cambio-sindicato/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El Código del Trabajo no puede garantizar una libertad y castigar su ejercicio</span>
+                <time class="escrito-card-date" datetime="2026-06-23">23 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/cifras-vs-dolor/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Las cifras y el dolor</span>
+                <time class="escrito-card-date" datetime="2026-06-23">23 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="govtech justicia">
+            <a class="escrito-card-link" href="/writing/digitalizacion-en-la-vejez/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Digitalización en la vejez: no es la máquina, es el diseño</span>
+                <time class="escrito-card-date" datetime="2026-06-22">22 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">GovTech, datos y transparencia</span><span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="ia ciencia">
+            <a class="escrito-card-link" href="/writing/ia-salud-ficha-del-que-espera/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">La IA en salud no vale más que sus datos</span>
+                <time class="escrito-card-date" datetime="2026-06-21">21 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Inteligencia Artificial</span><span class="topic-chip">Ciencia, medio ambiente y educación</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="justicia">
+            <a class="escrito-card-link" href="/writing/ninos-haitianos-deber-del-estado/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">El deber del Estado no tiene partido</span>
+                <time class="escrito-card-date" datetime="2026-06-18">18 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Justicia, derechos e instituciones</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia trabajo">
+            <a class="escrito-card-link" href="/writing/sala-cuna-universal/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Sala cuna universal, ¿a costa del seguro de cesantía?</span>
+                <time class="escrito-card-date" datetime="2026-06-17">17 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span><span class="topic-chip">Trabajo y empleo</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/megarreforma-los-numeros/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Una pregunta sobre los números de la megarreforma</span>
+                <time class="escrito-card-date" datetime="2026-06-16">16 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+        <li class="escrito-card" data-type="carta" data-topics="economia">
+            <a class="escrito-card-link" href="/writing/contribuciones-y-legitimidad/">
+                <span class="escrito-card-eyebrow">Carta al director</span>
+                <span class="escrito-card-title">Contribuciones: el alivio al adulto mayor ya existe</span>
+                <time class="escrito-card-date" datetime="2026-06-15">15 de junio de 2026</time>
+                <span class="escrito-card-topics">
+                    <span class="topic-chip">Economía y fiscalidad</span>
+                </span>
+            </a>
+        </li>
+        
+    </ul>
+    <p class="escritos-empty" id="escritos-empty" hidden>No hay escritos con esa combinación. Prueba con otro tema o tipo.</p>
 </div>
+
+<script src="/escritos.js?v=69b5683d"></script>
 
 
     <footer class="site-footer">

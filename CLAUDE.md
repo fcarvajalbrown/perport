@@ -27,7 +27,8 @@ The four pages (nav order Home / Writing / Portfolio / Works):
 
 The source tree:
 - `src/_includes/layout.njk` — shared `<head>`, top nav, footer; renders each page into `{{ content | safe }}`.
-- `src/index.md`, `src/writing/index.md`, `src/works/index.md` — editorial pages (Markdown + inline HTML).
+- `src/index.md`, `src/works/index.md` — editorial pages (Markdown + inline HTML).
+- `src/writing/index.njk` — the Escritos archive: a filterable list of every piece in the `escrito` collection (see "The Escritos section" below).
 - `src/portfolio/index.html` — the repo grid + hero + hidden modal that JS fills in.
 - `src/script.js` — all portfolio behavior (data loading, rendering, infinite scroll, modal). Loaded only on `/portfolio/`.
 - `src/styles.css` — all styling, CSS custom properties in `:root` (dark theme). `.page-editorial` overrides `--accent` to `#d9a55c`; `.page-portfolio` keeps amber.
@@ -38,7 +39,28 @@ The source tree:
 - `_site/` — **build output, committed to git** (unusual for 11ty, but required: there is no server-side build step, so the committed output is what the `git pull`-based deploy serves).
 - `docs/hostinger-setup.md` — one-time hPanel setup runbook (Git deploy, PHP version, token config, cron job).
 
-`styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, and the logo/favicon variants are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
+`styles.css`, `script.js`, `escritos.js`, `refresh.php`, `gh_config.sample.php`, and the logo/favicon variants are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, the Escritos page's `/escritos.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
+
+## The Escritos section (`/writing/`)
+
+An archive of Felipe's writing (cartas al director, columnas, LinkedIn artículos),
+built as an **Eleventy collection** tagged `escrito`. One Markdown file per piece
+under `src/writing/posts/`, front matter `title / date / type / topics[] / medium?`.
+Bodies are Felipe's words verbatim; nothing here is invented.
+
+- `src/_data/tax.js` — single source of truth for the **9-topic taxonomy** (slug +
+  label) and the type labels (`carta` / `columna` / `articulo`). Add a topic here
+  and it becomes a filter chip automatically.
+- `src/writing/index.njk` — renders every piece as a card with `data-type` /
+  `data-topics`; the filter bar (multi-select topic chips + a data-driven type
+  filter) is client-side JS in `src/escritos.js`, loaded only on this page.
+- `src/_includes/escrito.njk` — the per-piece page layout (`/writing/<slug>/`).
+- `.eleventy.js` adds the `fechaLarga` / `isoDate` (Spanish date) and `hasType`
+  filters used by these templates.
+- **Adding a new piece: use `scripts/import-escrito.js`** — it pulls title/date,
+  strips the signature block (incl. RUT and phone) from cartas, flattens citation
+  links, and writes the collection file. Full runbook: `docs/adding-escritos.md`.
+  Felipe writes almost daily, so reach for the script rather than hand-copying.
 
 ## How data flows (the important part)
 

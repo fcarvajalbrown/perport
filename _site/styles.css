@@ -1015,3 +1015,160 @@ footer {
         font-size: 2rem;
     }
 }
+
+/* ===== Escritos archive ===== */
+.escritos {
+    max-width: 860px;
+}
+
+.escritos-filter {
+    margin: 2.5rem 0 0.5rem;
+}
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.filter-types {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+.chip {
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.chip:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+}
+.chip.is-active {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+}
+.escritos-count {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+}
+
+.escritos-list {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.escrito-card[hidden] { display: none; }
+.escrito-card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: border-color 0.15s;
+}
+.escrito-card-link:hover {
+    border-color: var(--accent);
+}
+.escrito-card-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+}
+.escrito-card-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem;
+    color: var(--text);
+    line-height: 1.35;
+}
+.escrito-card-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.escrito-card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+}
+.topic-chip {
+    font-size: 0.72rem;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    list-style: none;
+}
+.escritos-empty {
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+}
+
+/* Individual escrito page */
+.page-editorial .escrito {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 0;
+}
+.escrito-back {
+    display: inline-block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+.escrito-back:hover { color: var(--accent); }
+.escrito-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+}
+.escrito-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    color: var(--text);
+    margin: 0 0 0.75rem;
+}
+.escrito-date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+}
+.escrito-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0 0 2rem;
+}
+.escrito-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text);
+}
+.escrito-body p { margin: 0 0 1.4rem; }
+
+@media (max-width: 640px) {
+    .escrito-title { font-size: 1.7rem; }
+    .escrito-body { font-size: 1rem; }
+}
