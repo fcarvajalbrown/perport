@@ -20,9 +20,11 @@ altUrl: /en/
         </div>
         <div class="filter-group filter-types" role="group" aria-label="Filtrar por tipo">
             <button class="chip chip-type is-active" data-type="all" type="button">Todas</button>
-            <button class="chip chip-type" data-type="carta" type="button">Cartas</button>
-            <button class="chip chip-type" data-type="columna" type="button">Columnas</button>
-            <button class="chip chip-type" data-type="articulo" type="button">Artículos</button>
+            {% for key, t in tax.tipos %}
+            {% if collections.escrito | hasType(key) %}
+            <button class="chip chip-type" data-type="{{ key }}" type="button">{{ t.plural }}</button>
+            {% endif %}
+            {% endfor %}
         </div>
         <p class="escritos-count" id="escritos-count" aria-live="polite"></p>
     </div>

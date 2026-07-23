@@ -31,6 +31,12 @@ module.exports = function (eleventyConfig) {
     return new Date(d).toISOString().slice(0, 10);
   });
 
+  // True if any item in the collection has the given escrito `type`. Used to
+  // render a type filter chip only when that type actually has content.
+  eleventyConfig.addFilter("hasType", function (collection, type) {
+    return (collection || []).some(function (item) { return item.data.type === type; });
+  });
+
   // Static assets copied verbatim into _site/ (no template processing).
   eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
