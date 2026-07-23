@@ -1,5 +1,9 @@
+#!/usr/bin/php
 <?php
 /**
+ * Shebang above lets hPanel's cron run this by bare path (`timeout <path>`);
+ * PHP ignores the shebang line. It's also runnable as `php refresh.php`.
+ *
  * Refreshes data.json from the GitHub API for the portfolio's daily background
  * update. Emits the SAME trimmed, card-ready shape as src/_data/repos.js
  * (build-time), so script.js can drop the repos straight into the pre-rendered

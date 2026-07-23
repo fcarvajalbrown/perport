@@ -1,0 +1,3 @@
+# refresh.php is run by the hPanel cron via its shebang, which must be LF-only
+# (a CRLF shebang would make Linux look for `/usr/bin/php\r`). Force LF.
+refresh.php text eol=lf
