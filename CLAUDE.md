@@ -69,12 +69,15 @@ The portfolio repos are **rendered into the HTML at build time** — there is no
 per-visitor GitHub fetch and no `data.json` on the critical path.
 
 1. **Build time — `src/_data/repos.js`.** An Eleventy JS data file fetches the
-   profile + repos from the GitHub API once per build, trims each repo to the
-   ~12 fields the page uses (the raw payload is ~400KB of mostly unused `_url`s),
-   filters out forks and `perport`, and adds a `lang_color` + relative
-   `updated_display`. It caches the last good result to `.cache/gh.json`
-   (gitignored) so repeated or offline builds don't hammer the API or break.
-   Set `GITHUB_TOKEN` in the env to fetch authenticated (higher rate limit).
+   profile + repos from the GitHub API, trims each repo to the ~12 fields the
+   page uses (the raw payload is ~400KB of mostly unused `_url`s), filters out
+   forks and any name in its `EXCLUDE` set (`perport`, `segovia-rd`; add repos
+   here to hide them), and adds a `lang_color` + relative `updated_display`.
+   A **production build** (`npx @11ty/eleventy`) always fetches fresh, so every
+   deploy reflects current GitHub state. The **dev server** (`--serve`/watch)
+   reuses a `.cache/gh.json` snapshot (gitignored) so rebuilding on every save
+   doesn't rate-limit; that cache is also the offline/failure fallback. Set
+   `GITHUB_TOKEN` in the env to fetch authenticated (higher rate limit).
 2. **`src/portfolio/index.html` and `src/en/portfolio/index.html`** render the
    profile and every repo card server-side (Liquid loop over `repos.repos`). Each
    card carries its trimmed repo object in a `data-repo` attribute (via the `json`

@@ -12,7 +12,9 @@ const path = require("path");
 
 const USER = "fcarvajalbrown";
 const CACHE = path.join(__dirname, "..", "..", ".cache", "gh.json");
-const CACHE_TTL_MS = 60 * 60 * 1000; // reuse a cached fetch within the hour
+
+// Repos to hide from the portfolio (lowercased). Forks are excluded separately.
+const EXCLUDE = new Set(["perport", "segovia-rd"]);
 
 // GitHub's per-language brand colors (single source of truth: used for both the
 // server-rendered card dots and, via each card's embedded JSON, the modal).
@@ -72,7 +74,11 @@ function writeCache(data) {
 
 module.exports = async function () {
   const cached = readCache();
-  if (cached && cached.fetchedAt && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
+  // A production build (`npx @11ty/eleventy`) always fetches fresh, so every
+  // deploy reflects the current GitHub state. The dev server (`--serve`/watch)
+  // reuses the cache so rebuilding on every file save doesn't rate-limit.
+  const mode = process.env.ELEVENTY_RUN_MODE; // 'build' | 'watch' | 'serve'
+  if (cached && (mode === "serve" || mode === "watch")) {
     return cached;
   }
   try {
@@ -85,7 +91,7 @@ module.exports = async function () {
       if (batch.length < 100) break;
     }
     const filtered = repos
-      .filter(function (r) { return !r.fork && (r.name || "").toLowerCase() !== "perport"; })
+      .filter(function (r) { return !r.fork && !EXCLUDE.has((r.name || "").toLowerCase()); })
       .map(trimRepo);
     const data = {
       profile: {
