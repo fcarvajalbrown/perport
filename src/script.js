@@ -157,6 +157,85 @@ function fetchWithTimeout(url, opts = {}, ms = 8000) {
     ]);
 }
 
+// --- Daily background refresh -------------------------------------------
+// The cards are baked into the HTML at build time (instant paint + SEO). On top
+// of that, an hPanel cron refreshes /data.json once a day with the same trimmed
+// shape; here we fetch it after paint (non-blocking, HTTP-cached) and update the
+// cards in place so stars/times/new repos stay current between deploys.
+
+const STAR_SVG = '<svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>';
+const FORK_SVG = '<svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zM10 3.25a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zm0 2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>';
+
+// Build a card DOM node from a trimmed repo object. Text fields go through
+// textContent (never innerHTML), so repo strings can't inject markup. Only our
+// own constant SVGs and the server-derived lang_color hex touch innerHTML.
+function buildCard(repo) {
+    const card = document.createElement('div');
+    card.className = 'repo-card';
+    card.dataset.repo = JSON.stringify(repo);
+    const langHtml = repo.language
+        ? `<span class="repo-lang"><span class="lang-dot" style="background:${repo.lang_color || '#8b949e'}"></span><span class="lang-name"></span></span>`
+        : '';
+    card.innerHTML = `
+        <div class="repo-header">
+            <span class="repo-name"></span>
+            <span class="repo-visibility"></span>
+        </div>
+        <p class="repo-desc"></p>
+        <div class="repo-footer">
+            ${langHtml}
+            <span class="repo-stars">${STAR_SVG}<span class="stars-n"></span></span>
+            <span class="repo-forks">${FORK_SVG}<span class="forks-n"></span></span>
+            <span class="repo-updated"></span>
+        </div>`;
+    card.querySelector('.repo-name').textContent = repo.name;
+    card.querySelector('.repo-visibility').textContent = repo.fork ? 'Fork' : repo.visibility;
+    card.querySelector('.repo-desc').textContent = repo.description || 'No description provided.';
+    if (repo.language) card.querySelector('.lang-name').textContent = repo.language;
+    card.querySelector('.stars-n').textContent = repo.stargazers_count;
+    card.querySelector('.forks-n').textContent = repo.forks_count;
+    card.querySelector('.repo-updated').textContent = repo.updated_display || timeAgo(repo.updated_at);
+    return card;
+}
+
+function updateProfile(p) {
+    const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val != null) el.textContent = val;
+    };
+    set('name', p.name);
+    set('stat-repos', p.public_repos);
+    set('stat-followers', p.followers);
+    set('stat-following', p.following);
+    const bio = document.getElementById('bio');
+    if (bio && p.bio) bio.textContent = p.bio;
+}
+
+async function backgroundRefresh() {
+    let data;
+    try {
+        const res = await fetchWithTimeout('/data.json', {}, 8000);
+        if (!res.ok) return;
+        data = await res.json();
+    } catch {
+        return; // no snapshot / offline: keep the baked cards
+    }
+    if (!data || !Array.isArray(data.repos) || data.repos.length === 0) return;
+
+    const grid = document.getElementById('repos-grid');
+    if (grid) {
+        const fragment = document.createDocumentFragment();
+        data.repos.forEach((repo, i) => {
+            const card = buildCard(repo);
+            card.style.animationDelay = `${(i % 12) * 0.05}s`;
+            fragment.appendChild(card);
+        });
+        grid.replaceChildren(fragment);
+        hydrateCards();
+    }
+    if (data.profile) updateProfile(data.profile);
+}
+
 // Modal listeners
 modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
 modal.querySelector('.modal-close').addEventListener('click', closeModal);
@@ -164,8 +243,13 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
+function init() {
+    hydrateCards();       // wire up the baked cards immediately
+    backgroundRefresh();  // then refresh from the daily snapshot, if present
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', hydrateCards);
+    document.addEventListener('DOMContentLoaded', init);
 } else {
-    hydrateCards();
+    init();
 }
