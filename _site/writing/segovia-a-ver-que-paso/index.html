@@ -1,0 +1,113 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
+    <title>Segovia: a ver qué pasó · Felipe Carvajal Brown</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Felipe Carvajal Brown">
+    <meta property="og:title" content="Segovia: a ver qué pasó · Felipe Carvajal Brown">
+    
+    <meta property="og:url" content="https://fcarvajalbrown.com/writing/segovia-a-ver-que-paso/">
+    <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Felipe Carvajal Brown">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Segovia: a ver qué pasó · Felipe Carvajal Brown">
+    
+    <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
+    <link rel="canonical" href="https://fcarvajalbrown.com/writing/segovia-a-ver-que-paso/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
+    <link rel="stylesheet" href="/styles.css?v=f96f2f1d">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="page-editorial">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/" aria-label="Inicio, Felipe Carvajal Brown">
+                <picture>
+                    <source srcset="/logo-nav.webp?v=bee9b98d" type="image/webp">
+                    <img src="/logo-nav.png?v=934a7fd9" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/">Inicio</a></li>
+                
+                <li><a href="/writing/">Escritos</a></li>
+                
+                <li><a href="/portfolio/">Portafolio</a></li>
+                
+                <li><a href="/works/">Obras</a></li>
+                
+                <li><a class="site-nav-lang" href="/" title="View in English">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <img class="escrito-cover" src="/writing/covers/2026-07-20-segovia-a-ver-que-paso.webp" alt="" width="1200" height="675" />
+    <p class="escrito-eyebrow">Artículo</p>
+    <h1 class="escrito-title">Segovia: a ver qué pasó</h1>
+    <p class="escrito-date"><time datetime="2026-07-20">20 de julio de 2026</time></p>
+    
+    <ul class="escrito-topics">
+        <li class="topic-chip">Software e ingeniería</li><li class="topic-chip">Ciencia, medio ambiente y educación</li>
+    </ul>
+    
+    <div class="escrito-body">
+        <p>A ver qué pasó.</p>
+<p>En junio prometí que había un solo test que importaba: procesar una grabación real de una hora en menos de dos gigabytes de memoria, más rápido que las herramientas actuales. Y que si no lo superaba, lo diría.</p>
+<p>Cuarenta días después, el test está corrido. Sobre datos reales del International Brain Laboratory, una de las bases de electrofisiología más usadas en neurociencia activa. Los números son los que son.</p>
+<h2>El test</h2>
+<p>Una sola sonda Neuropixels escribe unos 80 GB por hora a 30 kHz. El problema no es la grabación: es procesarla sin que el software reviente la memoria de la máquina que tienes encima de la mesa.</p>
+<p>Segovia procesa esa señal en modo <em>streaming</em>: lee un trozo, filtra, devuelve a Python, descarta. El tamaño del buffer no escala con el largo de la grabación. <strong>Una grabación de un minuto y una de una hora tienen el mismo techo de memoria, por construcción.</strong> El nombre no es un accidente: el Acueducto de Segovia lleva agua tramo a tramo, por arcos, sin acumularla.</p>
+<p>La comparación fue contra SpikeInterface en dos modos: <em>thread pool</em> (memoria compartida entre hilos) y <em>process pool</em> (un proceso Python por worker, más su copia de memoria). El presupuesto de tiempo que importa en procesamiento online es 300 ms por trozo; si el motor overruna ese límite, no sirve para tiempo real.</p>
+<h2>Los números</h2>
+<p>Sobre una hora de datos IBL reales:</p>
+<p>Memoria: <strong>Segovia usa ~1 GB de peak RSS. El thread pool de SpikeInterface usa 1,75 GB; el process pool, 2,84 GB.</strong> En la máquina de 7,8 GB de RAM donde corrí la prueba, el process pool con 8 workers revienta con OOM. Segovia no. Ese era el punto.</p>
+<p>Latencia online: Segovia cumple el presupuesto de 300 ms en el 100% de los trozos sobre datos comprimidos <code>.cbin</code> reales. SpikeInterface llega al 69,5% con p99 de 366 ms, que ya overruna el deadline. En online, Segovia gana en media, en cola y en porcentaje de cumplimiento.</p>
+<p>Y la trampa honesta: en procesamiento batch offline, con el executor paralelo de SpikeInterface, las dos herramientas empatan. Segovia corre a ~0,84× la velocidad del thread pool de SI, dentro del margen de medición. Lo documenté tal como salió, sin suavizarlo. El README tiene los números, el método y las advertencias completas.</p>
+<p>La promesa era memoria acotada y latencia online. Eso se cumplió. El batch, no.</p>
+<h2>Lo que sigue</h2>
+<p>v0.4.0 sale con la cadena completa de preprocesamiento: filtro pasa-banda, <em>common-median reference</em> y blanqueo, todo en un solo pase sobre datos de cualquier largo. Un paper está en revisión en GigaByte Journal, con el método, las cifras verificadas y el código reproducible. <code>pip install segovia</code> ya funciona en v0.3.0 con los tres lectores; el preprocesamiento llega en el siguiente release.</p>
+<p>La parte que sigue siendo honesta: <strong>el motor que resuelve electrofisiología comparte núcleo con el que podría un día ayudar en genómica de célula única, la que sí estudia cómo evoluciona una leucemia.</strong> Lo construyo neutral respecto al dominio para que esa puerta quede abierta, no para prometérsela a nadie. Ayudar, si se puede. No prometer de más.</p>
+<p>Claudio Segovia tenía 26 años.</p>
+
+    </div>
+</article>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago de Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>

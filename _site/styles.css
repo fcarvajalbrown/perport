@@ -1084,6 +1084,16 @@ footer {
 .escrito-card-link:hover {
     border-color: var(--accent);
 }
+.escrito-card-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    background: var(--bg);
+}
 .escrito-card-eyebrow {
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -1134,6 +1144,16 @@ footer {
     margin-bottom: 1.5rem;
 }
 .escrito-back:hover { color: var(--accent); }
+.escrito-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    background: var(--bg-elevated);
+}
 .escrito-eyebrow {
     text-transform: uppercase;
     letter-spacing: 0.14em;

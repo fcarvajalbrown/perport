@@ -1,0 +1,117 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
+    <title>82 municipios con MySQL expuesto: lo que la ANCI no publicó · Felipe Carvajal Brown</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Felipe Carvajal Brown">
+    <meta property="og:title" content="82 municipios con MySQL expuesto: lo que la ANCI no publicó · Felipe Carvajal Brown">
+    
+    <meta property="og:url" content="https://fcarvajalbrown.com/writing/82-municipios-mysql-expuesto/">
+    <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Felipe Carvajal Brown">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="82 municipios con MySQL expuesto: lo que la ANCI no publicó · Felipe Carvajal Brown">
+    
+    <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
+    <link rel="canonical" href="https://fcarvajalbrown.com/writing/82-municipios-mysql-expuesto/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
+    <link rel="stylesheet" href="/styles.css?v=f96f2f1d">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="page-editorial">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/" aria-label="Inicio, Felipe Carvajal Brown">
+                <picture>
+                    <source srcset="/logo-nav.webp?v=bee9b98d" type="image/webp">
+                    <img src="/logo-nav.png?v=934a7fd9" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/">Inicio</a></li>
+                
+                <li><a href="/writing/">Escritos</a></li>
+                
+                <li><a href="/portfolio/">Portafolio</a></li>
+                
+                <li><a href="/works/">Obras</a></li>
+                
+                <li><a class="site-nav-lang" href="/" title="View in English">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <img class="escrito-cover" src="/writing/covers/2026-06-25-82-municipios-mysql-expuesto.webp" alt="" width="1200" height="675" />
+    <p class="escrito-eyebrow">Artículo</p>
+    <h1 class="escrito-title">82 municipios con MySQL expuesto: lo que la ANCI no publicó</h1>
+    <p class="escrito-date"><time datetime="2026-06-25">25 de junio de 2026</time></p>
+    
+    <ul class="escrito-topics">
+        <li class="topic-chip">GovTech, datos y transparencia</li>
+    </ul>
+    
+    <div class="escrito-body">
+        <p>Viña del Mar tiene el puerto 3306 de su base de datos abierto al mundo. La Serena también. Antofagasta, San Miguel, Vallenar. Cualquier persona con un computador puede intentar conectarse a los registros de contribuyentes, trámites y datos personales de sus vecinos. Lo verifiqué yo, el 10 de marzo de 2026, con un scanner construido en mi tiempo libre y que cualquiera puede reproducir hoy mismo.</p>
+<h2>Lo que encontré en los 345 municipios</h2>
+<p>Tiré el scanner sobre los 345 sitios web municipales de Chile en la semana exacta del cambio de mando presidencial. El resultado: <strong>82 municipalidades, el 24% del total, tienen el puerto MySQL directamente expuesto a internet.</strong> Eso significa que cualquier persona puede intentar conectarse a su base de datos desde cualquier parte del mundo, sin pisar el municipio, sin vulnerar nada sofisticado. Basta un TCP connect al puerto 3306.</p>
+<p>Otros 50 municipios operan sin SSL válido. Los datos que sus vecinos ingresan en formularios en línea viajan sin cifrar por la red, del computador al servidor, pasando por todo lo que hay en el medio. Siete municipios siguen corriendo PHP 5.x, software sin actualizaciones de seguridad desde diciembre de 2018. Y 221 tienen el panel de administración de su servidor (cPanel) accesible desde internet, para que lo intente abrir quien quiera.</p>
+<p>No es una alerta genérica de consultor. El código del scanner está en GitHub, los datos crudos en <code>results.json</code>, todo reproducible. Si alguien quiere refutar el número, tiene las herramientas a disposición.</p>
+<p>¿Quién lo encargó? Nadie. Lo hice en mi tiempo libre.</p>
+<h2>La ley que lleva más de un año en vigor</h2>
+<p>La Ley Marco de Ciberseguridad N° 21.663 fue promulgada en abril de 2024. Sus obligaciones entraron a regir el 1 de marzo de 2025, y los municipios están dentro de su alcance: el artículo primero los incluye entre los organismos del Estado que deben cumplir. La ANCI empezó a operar el 2 de enero de 2025 y tiene la facultad de solicitar evidencia de cumplimiento y aplicar sanciones. <strong>Por infracciones graves puede multar hasta 20.000 UTM, y hasta 40.000 UTM a los operadores de importancia vital.</strong></p>
+<p>Un MySQL con el puerto 3306 expuesto a internet es, sin eufemismos, un servicio sin las medidas mínimas que la ley exige. No hace falta una auditoría técnica sofisticada para comprobarlo. El que expone su base de datos al mundo no puede alegar ignorancia técnica, y la ANCI no puede alegar que no tenía herramientas. Las herramientas están en GitHub, gratis, con licencia abierta.</p>
+<p>La ley es reciente y los organismos tienen plazos para ponerse al día. Pero los plazos ya corrieron. Las obligaciones rigen desde marzo de 2025, y los 82 municipios con MySQL expuesto en marzo de 2026 no son un problema de agenda.</p>
+<h2>El diagnóstico que ya existía antes de la ley</h2>
+<p>La Asociación de Municipalidades de Chile (AMUCH) publicó en octubre de 2024 un informe sobre los desafíos de ciberseguridad en los municipios. No como predicción: como diagnóstico.</p>
+<p><strong>El 68.7% de los municipios no tiene un plan de respuesta ante incidentes de ciberseguridad.</strong> El 71% no había capacitado a su personal en los 18 meses anteriores. El 63% no tiene presupuesto para avanzar en digitalización. El 57.2% no clasifica la información que maneja bajo ningún criterio de seguridad.</p>
+<p>El problema no llegó con la Ley 21.663. La ley llegó después del problema. No al revés. Lo que cambió fue la obligación formal y la posibilidad de sanción. Lo que no cambió fue la realidad técnica de los municipios, como confirma el scanner.</p>
+<p>Nadie puede decir que no sabía. AMUCH lo publicó. Está disponible en su sitio, en abierto. Aun así, en la semana en que Chile estrenaba un nuevo gobierno, 82 bases de datos municipales seguían con el puerto expuesto.</p>
+<h2>La pregunta que la ANCI no ha respondido</h2>
+<p>Llevan un año y medio funcionando. Tienen el mandato legal y las facultades para auditar a todos los organismos del Estado. Pueden solicitar evidencia de cumplimiento y aplicar multas. <strong>Lo que no han publicado, a la fecha, es un reporte público de cumplimiento municipal.</strong></p>
+<p>No hay un listado oficial de qué municipios cumplen y cuáles no. No hay un número oficial de organismos con servicios expuestos a internet. El Estado legisló la ciberseguridad y todavía no midió si la tiene.</p>
+<p>Lo que sí existe es un scanner construido en tiempo libre, con código abierto, por un ingeniero que gana cerca del sueldo mínimo. Los datos están en GitHub: los 82 municipios con MySQL expuesto, los 50 sin SSL, los 7 con PHP obsoleto desde 2018, los 221 con cPanel abierto. Todo ahí, sin costo, reproducible por cualquiera.</p>
+<p>La ANCI lleva un año y medio funcionando.</p>
+<p>¿Cuándo va a publicar su propio reporte?</p>
+
+    </div>
+</article>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago de Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>
