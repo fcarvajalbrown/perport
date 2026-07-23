@@ -37,11 +37,18 @@ module.exports = function (eleventyConfig) {
     return (collection || []).some(function (item) { return item.data.type === type; });
   });
 
+  // Serialize a value to JSON for embedding in a data-* attribute (portfolio
+  // cards carry their repo object so the modal can hydrate without a fetch).
+  eleventyConfig.addFilter("json", function (value) {
+    return JSON.stringify(value);
+  });
+
   // Static assets copied verbatim into _site/ (no template processing).
   eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
   eleventyConfig.addPassthroughCopy({ "src/escritos.js": "escritos.js" });
   eleventyConfig.addPassthroughCopy("src/writing/covers");
+  eleventyConfig.addPassthroughCopy({ "src/avatar.webp": "avatar.webp" });
   eleventyConfig.addPassthroughCopy({ "src/refresh.php": "refresh.php" });
   eleventyConfig.addPassthroughCopy({ "src/gh_config.sample.php": "gh_config.sample.php" });
   eleventyConfig.addPassthroughCopy({ "src/logo-nav.png": "logo-nav.png" });

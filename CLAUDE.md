@@ -22,24 +22,25 @@ A four-page personal site for the GitHub user `fcarvajalbrown`, built with **Ele
 The four pages (nav order Home / Writing / Portfolio / Works):
 - `/` — Home/About landing (editorial: serif-italic headline, warm accent `#d9a55c`).
 - `/writing/` — writing archive (stub for now; content model is a separate, not-yet-written spec).
-- `/portfolio/` — the GitHub repo grid + modal (Inter sans-serif, amber `#f59e0b`), fed by `refresh.php`/`data.json`.
+- `/portfolio/` — the GitHub repo grid + modal (Inter sans-serif, amber `#f59e0b`), rendered server-side at build from `src/_data/repos.js`.
 - `/works/` — stub for now (content design is a separate, not-yet-written spec).
 
 The source tree:
 - `src/_includes/layout.njk` — shared `<head>`, top nav, footer; renders each page into `{{ content | safe }}`.
 - `src/index.md`, `src/works/index.md` — editorial pages (Markdown + inline HTML).
 - `src/writing/index.njk` — the Escritos archive: a filterable list of every piece in the `escrito` collection (see "The Escritos section" below).
-- `src/portfolio/index.html` — the repo grid + hero + hidden modal that JS fills in.
-- `src/script.js` — all portfolio behavior (data loading, rendering, infinite scroll, modal). Loaded only on `/portfolio/`.
+- `src/portfolio/index.html` — the repo grid + hero + modal, all rendered server-side at build from the `repos` data (see "How the portfolio data flows"). `src/en/portfolio/index.html` is the English mirror.
+- `src/_data/repos.js` — build-time GitHub fetch that feeds the portfolio (`repos.profile`, `repos.repos`).
+- `src/avatar.webp` — self-hosted profile avatar (regenerate with `scripts/gen-avatar.js`).
+- `src/script.js` — portfolio hydration only (tilt, modal, on-demand README). Loaded only on `/portfolio/`; does not fetch repo data.
 - `src/styles.css` — all styling, CSS custom properties in `:root` (dark theme). `.page-editorial` overrides `--accent` to `#d9a55c`; `.page-portfolio` keeps amber.
 - `src/logo.png` — full-resolution spade-skull brand mark; the source image for the small nav/favicon variants, not served directly. `scripts/gen-logo-assets.js` (uses `sharp`) regenerates `src/logo-nav.png`, `src/logo-nav.webp`, `src/favicon-32.png`, and `src/apple-touch-icon.png` from it; the layout references those, not `logo.png`.
-- `src/refresh.php` — PHP CLI script that fetches the profile + repos from the GitHub API and writes `data.json`. Run on a schedule by an hPanel cron job on Hostinger. `data.json` is untracked (see `.gitignore`) and regenerated on the server, not committed.
-- `src/gh_config.sample.php` — template showing the shape of the (untracked) token config file `refresh.php` reads.
-- `.eleventy.js` — 11ty config: input `src`, output `_site`, the `bust` cache-busting filter, and passthrough copies for `styles.css`, `script.js`, `refresh.php`, `gh_config.sample.php`, `og-image.png`, `.htaccess`, `robots.txt`, and the logo/favicon variants (`logo-nav.png`, `logo-nav.webp`, `favicon-32.png`, `apple-touch-icon.png`).
+- `src/refresh.php`, `src/gh_config.sample.php` — **legacy** (the old server-side `data.json` snapshot pipeline; no longer used by the page, see "Legacy" below).
+- `.eleventy.js` — 11ty config: input `src`, output `_site`, the `bust` cache-busting filter, the `fechaLarga`/`isoDate`/`hasType`/`json` filters, and passthrough copies for `styles.css`, `script.js`, `escritos.js`, `avatar.webp`, the Escritos `writing/covers/`, `og-image.png`, `.htaccess`, `robots.txt`, and the logo/favicon variants.
 - `_site/` — **build output, committed to git** (unusual for 11ty, but required: there is no server-side build step, so the committed output is what the `git pull`-based deploy serves).
 - `docs/hostinger-setup.md` — one-time hPanel setup runbook (Git deploy, PHP version, token config, cron job).
 
-`styles.css`, `script.js`, `escritos.js`, `refresh.php`, `gh_config.sample.php`, and the logo/favicon variants are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js`, the Escritos page's `/escritos.js`, and `refresh.php`'s `__DIR__`-relative `data.json` write all resolve unchanged.
+`styles.css`, `script.js`, `escritos.js`, `avatar.webp`, and the logo/favicon variants are passthrough-copied to `_site/` root, so the layout's `/styles.css`, the portfolio page's `/script.js` + `/avatar.webp`, and the Escritos page's `/escritos.js` all resolve unchanged. (`refresh.php` / `gh_config.sample.php` are still passthrough-copied but legacy.)
 
 ## The Escritos section (`/writing/`)
 
@@ -62,23 +63,43 @@ Bodies are Felipe's words verbatim; nothing here is invented.
   links, and writes the collection file. Full runbook: `docs/adding-escritos.md`.
   Felipe writes almost daily, so reach for the script rather than hand-copying.
 
-## How data flows (the important part)
+## How the portfolio data flows (the important part)
 
-The site shows GitHub data via a **snapshot-first model with a live-API fallback**:
+The portfolio repos are **rendered into the HTML at build time** — there is no
+per-visitor GitHub fetch and no `data.json` on the critical path.
 
-1. **Primary path (Hostinger) — `data.json` refreshed by `refresh.php`.** An hPanel cron job runs `refresh.php` every hour (`0 * * * *`, UTC). It fetches the profile and all repos from the GitHub API (authenticated with a fine-grained PAT when `gh_config.php` is present, otherwise unauthenticated), filters out forks and the `perport` repo, and atomically overwrites `data.json` in `public_html`. The browser fetches that static file (cache-busted, `no-store`) on load — no GitHub API calls from visitors.
-2. **Fallback path — live API.** When no `data.json` is present, `script.js` falls back to the original client-side GitHub API calls (`fetchProfile` + paginated `loadMoreRepos`). Keep this fallback working when editing `script.js`; it's the path used in local dev (no cron there) and any environment without a refreshed snapshot.
-3. **Local dev — live API**, same reason as (2): no `data.json` present unless you run `refresh.php` locally.
+1. **Build time — `src/_data/repos.js`.** An Eleventy JS data file fetches the
+   profile + repos from the GitHub API once per build, trims each repo to the
+   ~12 fields the page uses (the raw payload is ~400KB of mostly unused `_url`s),
+   filters out forks and `perport`, and adds a `lang_color` + relative
+   `updated_display`. It caches the last good result to `.cache/gh.json`
+   (gitignored) so repeated or offline builds don't hammer the API or break.
+   Set `GITHUB_TOKEN` in the env to fetch authenticated (higher rate limit).
+2. **`src/portfolio/index.html` and `src/en/portfolio/index.html`** render the
+   profile and every repo card server-side (Liquid loop over `repos.repos`). Each
+   card carries its trimmed repo object in a `data-repo` attribute (via the `json`
+   filter + `escape`), so the page HTML is complete and indexable — no "loading"
+   state.
+3. **`src/script.js` only hydrates** the pre-rendered cards: 3D tilt, the detail
+   modal, and an on-demand README fetch (the one and only live GitHub call, made
+   just when a card is opened). It does **not** fetch repo data or `data.json`.
+4. **The avatar is self-hosted** at `src/avatar.webp` (regenerate with
+   `node scripts/gen-avatar.js` when the GitHub avatar changes) and referenced
+   directly in the HTML, so it paints instantly instead of following a
+   `github.com` → avatars-CDN redirect.
 
-`loadSnapshot()` decides which path is taken and sets the `usingSnapshot` flag; the `IntersectionObserver` and init block in `script.js` branch on it. In snapshot mode all repos are already in memory and infinite scroll just slices `allRepos`; in fallback mode each scroll fetches one API page.
+**Freshness is deploy-time:** repos refresh whenever the site is rebuilt and
+deployed. Rebuild to update.
 
-### `refresh.php` invariants (do not regress these)
+### Legacy: `refresh.php` / `data.json` / the hourly cron
 
-- **CLI-only.** `refresh.php` exits immediately unless run from the CLI (`php_sapi_name() !== 'cli'`), so it does nothing if ever requested over HTTP.
-- **Exclude `perport` and forks from the snapshot.** Same filter the client already applies (see `filter_repos()`); keeps the two paths in agreement.
-- **Atomic write.** Writes to `data.json.tmp` then `rename()`s over `data.json` (see `write_snapshot_atomic()`), so a visitor never reads a half-written file.
-- **Fail-safe on API errors.** Any fetch/parse failure leaves the existing `data.json` untouched and exits non-zero (visible in the hPanel cron log) rather than writing a partial or empty snapshot.
-- **Token is optional.** Missing/empty `gh_config.php` (or `GITHUB_TOKEN` env var) means `refresh.php` runs unauthenticated rather than failing (see `load_token()`) — see `docs/hostinger-setup.md` for why a token is still recommended.
+The old model fetched a server-side `data.json` snapshot (refreshed by an hPanel
+cron running `refresh.php`) that the browser downloaded on every load. **The page
+no longer uses this** — `refresh.php`, `gh_config.sample.php`, and the `data.json`
+cache rule in `.htaccess` remain only as legacy and can be removed. The hPanel
+cron (if still configured) writes a `data.json` nothing reads; disable it in
+hPanel's Cron Jobs UI if you want. Note the shared host has no `crontab` binary,
+so crons are managed only through hPanel's UI, not SSH.
 
 ## Running it locally
 
