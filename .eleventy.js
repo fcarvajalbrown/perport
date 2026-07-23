@@ -19,9 +19,22 @@ module.exports = function (eleventyConfig) {
     }
   });
 
+  // Spanish long-date formatting for escritos. Read UTC fields so a date-only
+  // front-matter value ("2026-07-09") is not shifted a day by local timezone.
+  const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  eleventyConfig.addFilter("fechaLarga", function (d) {
+    const dt = new Date(d);
+    return dt.getUTCDate() + " de " + MESES[dt.getUTCMonth()] + " de " + dt.getUTCFullYear();
+  });
+  eleventyConfig.addFilter("isoDate", function (d) {
+    return new Date(d).toISOString().slice(0, 10);
+  });
+
   // Static assets copied verbatim into _site/ (no template processing).
   eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
+  eleventyConfig.addPassthroughCopy({ "src/escritos.js": "escritos.js" });
   eleventyConfig.addPassthroughCopy({ "src/refresh.php": "refresh.php" });
   eleventyConfig.addPassthroughCopy({ "src/gh_config.sample.php": "gh_config.sample.php" });
   eleventyConfig.addPassthroughCopy({ "src/logo-nav.png": "logo-nav.png" });

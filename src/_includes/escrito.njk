@@ -1,0 +1,18 @@
+---
+layout: layout.njk
+bodyClass: page-editorial
+---
+<article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <p class="escrito-eyebrow">{{ tax.tipos[type].singular }}{% if medium %} · {{ medium }}{% endif %}</p>
+    <h1 class="escrito-title">{{ title }}</h1>
+    <p class="escrito-date"><time datetime="{{ page.date | isoDate }}">{{ page.date | fechaLarga }}</time></p>
+    {% if topics.length %}
+    <ul class="escrito-topics">
+        {% for t in topics %}<li class="topic-chip">{{ tax.labelOf[t] }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    <div class="escrito-body">
+        {{ content | safe }}
+    </div>
+</article>

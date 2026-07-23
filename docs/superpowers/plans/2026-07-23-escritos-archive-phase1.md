@@ -27,7 +27,9 @@
 - Modify: `.eleventy.js` (add two date filters + one passthrough)
 - Create: `src/_includes/escrito.njk`
 - Create: `src/writing/posts/posts.json` (directory data: layout, tag, permalink)
-- Create: `src/writing/posts/2026-07-09_tercerizacion-bc-tecnologia.md` (seed columna)
+- Create: `src/writing/posts/2026-07-09-tercerizacion-bc-tecnologia.md` (seed columna)
+
+Note: filenames use a **dash-separated** date prefix (`YYYY-MM-DD-slug.md`) so Eleventy auto-strips the date from `fileSlug`, giving clean URLs like `/writing/tercerizacion-bc-tecnologia/`.
 
 **Interfaces:**
 - Produces: `tax.topics` (ordered array of `{slug,label}`), `tax.labelOf` (`{slug: label}`), `tax.tipos` (`{carta|columna|articulo: {singular, plural}}`) — consumed by Tasks 2 and later.

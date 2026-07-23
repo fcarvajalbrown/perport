@@ -1,0 +1,6 @@
+{
+  "layout": "escrito.njk",
+  "tags": "escrito",
+  "lang": "es",
+  "permalink": "/writing/{{ page.fileSlug }}/"
+}
