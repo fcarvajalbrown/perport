@@ -214,7 +214,10 @@ function updateProfile(p) {
 async function backgroundRefresh() {
     let data;
     try {
-        const res = await fetchWithTimeout('/data.json', {}, 8000);
+        // 10-minute cache bucket: the URL is stable within a window (so it's
+        // cacheable) but rotates, so a stale CDN copy is never pinned for hours.
+        const bucket = Math.floor(Date.now() / 600000);
+        const res = await fetchWithTimeout('/data.json?v=' + bucket, {}, 8000);
         if (!res.ok) return;
         data = await res.json();
     } catch {

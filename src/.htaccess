@@ -9,10 +9,11 @@
         Header set Cache-Control "no-cache, must-revalidate"
     </FilesMatch>
 
-    # data.json: the daily background-refresh snapshot. Cache a few hours so
-    # repeat visits within the day don't refetch (cron refreshes it once daily).
+    # data.json: the background-refresh snapshot. Short cache so a cron update
+    # becomes visible within ~10 min (script.js also fetches a 10-min-bucketed
+    # URL so a stale CDN entry is bypassed rather than pinned for hours).
     <FilesMatch "^data\.json$">
-        Header set Cache-Control "public, max-age=21600"
+        Header set Cache-Control "public, max-age=600"
     </FilesMatch>
 
     # Fingerprinted static assets: safe to cache long-term because the URL
