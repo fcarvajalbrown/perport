@@ -7,3 +7,6 @@ gh_config.php
 .superpowers/
 PROMPT.md
 skills-lock.json
+gsc-check-state.json
+gsc-check-log.txt
+gsc-check-debug.log

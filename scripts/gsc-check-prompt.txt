@@ -1,0 +1,17 @@
+You are running as an unattended daily automation. There is no chat history and no one available to answer questions. Complete this task fully in one pass; do not wait for input and do not ask clarifying questions.
+
+Task: check Google Search Console indexing/coverage health for fcarvajalbrown.com and report only if something actually looks wrong.
+
+Properties to check (call the mcp__gsc-server tools for both):
+- sc-domain:fcarvajalbrown.com
+- https://fcarvajalbrown.com/
+
+Steps:
+1. Read C:\Projects\portfolio\gsc-check-state.json if it exists. That is yesterday's snapshot. If the file does not exist, this is the first run: just record a baseline, do not alert.
+2. Call mcp__gsc-server__check_indexing_issues, mcp__gsc-server__get_sitemaps, and mcp__gsc-server__get_performance_overview for both properties. Collect: indexed page count, indexing error count, sitemap status/errors, and total clicks + impressions for the last 7 days.
+3. Compare today's numbers to the previous snapshot. Flag a regression if any of: indexing errors increased, indexed page count dropped, any sitemap shows an error status, or clicks/impressions dropped more than roughly 30% week over week without it being explainable by normal weekday variation. Do not over-alert on small, ordinary fluctuations.
+4. Overwrite C:\Projects\portfolio\gsc-check-state.json with today's snapshot (a small JSON object with the numbers above plus today's date).
+5. Append exactly one line to C:\Projects\portfolio\gsc-check-log.txt: "<today's date>: OK - <one-line summary>" on a normal day, or "<today's date>: ALERT - <what regressed>" if step 3 found a regression.
+6. Only if step 3 found a real regression, call the PushNotification tool with a short, specific message (under 200 characters) describing exactly what broke, e.g. "GSC alert: 4 new indexing errors on fcarvajalbrown.com, was 0 yesterday." Do not call PushNotification on a normal/OK day, and do not call it more than once.
+
+Do not modify any other files. Do not use git. Do not attempt to fix anything you find; only detect and report.

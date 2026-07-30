@@ -2,6 +2,32 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## TODO, next session: GSC check via hPanel/PHP cron (deferred 2026-07-30)
+
+A local daily Windows Task Scheduler job (`scripts/gsc-daily-check.ps1`, task
+name `GSC-Daily-Check-fcarvajalbrown`, runs 8:00 AM local) already checks
+Google Search Console indexing/coverage for fcarvajalbrown.com via the
+`mcp__gsc-server` MCP tools, and only pushes a notification on a real
+regression (new indexing errors, dropped pages, sitemap errors). That part is
+done and tested.
+
+Felipe also wants a second, server-side path: an hPanel cron running a PHP
+script (same pattern as `src/refresh.php`) that hits the Search Console API
+directly from the Hostinger box. This is blocked on Felipe's side: PHP on
+that server can't reuse the local OAuth login the MCP tool uses, so it needs
+its own Google Cloud service account. Before this can be built, Felipe needs
+to, in Google Cloud Console:
+1. Create a service account (enable the Search Console API on that project).
+2. Download its JSON key.
+3. Add the service account's email as a read-only user on the
+   `fcarvajalbrown.com` property in Search Console (Settings > Users and
+   permissions).
+
+Once he has the key file, the next step is writing a PHP script that reads
+it, calls the Search Console API, and writes results somewhere he can check
+(plus wiring an hPanel cron job for it, same as the existing `refresh.php`
+cron — hPanel Cron Jobs UI only, no `crontab` over SSH on this host).
+
 ## HARD RULE: humanize ALL user-facing text BEFORE writing it
 
 **Any text a visitor can read — page copy, headlines, ledes, taglines, nav labels, button text, alt text, meta titles, error/empty states, footer, ANY microcopy — MUST pass the AI-tell / humanizer scrub BEFORE it is written into a file. Not after. Not "later." Before.**
