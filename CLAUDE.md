@@ -2,16 +2,32 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## TODO, next session: GSC check via hPanel/PHP cron (deferred 2026-07-30)
+## Search Console monitoring: retired 2026-09-13
 
-A local daily Windows Task Scheduler job (`scripts/gsc-daily-check.ps1`, task
-name `GSC-Daily-Check-fcarvajalbrown`, runs 8:00 AM local) already checks
-Google Search Console indexing/coverage for fcarvajalbrown.com via the
-`mcp__gsc-server` MCP tools, and only pushes a notification on a real
-regression (new indexing errors, dropped pages, sitemap errors). That part is
-done and tested.
+**There is no automated GSC check any more.** The local daily Windows Task
+Scheduler job `GSC-Daily-Check-fcarvajalbrown` (ran `scripts/gsc-daily-check.ps1`
+at 09:00 via the `mcp__gsc-server` MCP tools) was unregistered on 2026-09-13, and
+`gsc-server` itself was removed from the Claude MCP config — it is not configured
+in any scope on this machine, so those tools no longer resolve.
 
-Felipe also wants a second, server-side path: an hPanel cron running a PHP
+Why: in 12 runs from 2026-07-30 to 2026-09-04 it never once fired its alert. At
+this site's volume (0 clicks, ~25 impressions per 7 days) the >30%-drop rule
+mostly produces false signals, and it did produce one on 2026-09-03 off a stale
+baseline. It also popped a visible console window on every login and on every
+resume from hibernation, because the task was registered Interactive and
+`StartWhenAvailable`.
+
+The pieces are still on disk, unused: `scripts/gsc-daily-check.ps1`,
+`scripts/gsc-check-prompt.txt`, and the exported task definition
+`scripts/gsc-daily-check.task.xml`. Restoring the job is
+`Register-ScheduledTask -Xml (Get-Content scripts/gsc-daily-check.task.xml -Raw) -TaskName GSC-Daily-Check-fcarvajalbrown`
+plus re-adding `gsc-server` to the MCP config. The last run's output is in
+`gsc-check-debug.log` / `gsc-check-log.txt` / `gsc-check-state.json` at the repo
+root.
+
+### Still deferred: GSC check via hPanel/PHP cron (deferred 2026-07-30)
+
+Felipe wanted a second, server-side path: an hPanel cron running a PHP
 script (same pattern as `src/refresh.php`) that hits the Search Console API
 directly from the Hostinger box. This is blocked on Felipe's side: PHP on
 that server can't reuse the local OAuth login the MCP tool uses, so it needs
