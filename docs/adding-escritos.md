@@ -53,14 +53,14 @@ call, so `--topics` is required.
 
 ## Topics (the taxonomy)
 
-The 9 topic slugs live in `src/_data/tax.js` (single source of truth). Read the
+The 8 topic slugs live in `src/_data/tax.js` (single source of truth). Read the
 piece and pick the one or two that fit:
 
 `ia` (Inteligencia Artificial) · `trabajo` (Trabajo y empleo) ·
 `economia` (Economía y fiscalidad) · `software` (Software e ingeniería) ·
 `govtech` (GovTech, datos y transparencia) · `ciudad` (Vivienda, ciudad e
 infraestructura) · `ciencia` (Ciencia, medio ambiente y educación) ·
-`justicia` (Justicia, derechos e instituciones) · `politica` (Política y partidos)
+`justicia` (Justicia, derechos e instituciones)
 
 A piece can carry several: `--topics ia,justicia`. To add a brand-new topic,
 add it to `tax.js` (slug + label) and it appears as a filter chip automatically;
