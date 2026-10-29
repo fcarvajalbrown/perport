@@ -146,7 +146,7 @@ function cleanBody(body) {
   if (sigIdx !== -1) lines = lines.slice(0, sigIdx);
   let text = lines.join("\n");
   // Flatten markdown links [texto](url) -> texto.
-  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  text = text.replace(/(?<!!)\[([^\]]+)\]\([^)]+\)/g, "$1");
   // Collapse 3+ blank lines and trim.
   text = text.replace(/\n{3,}/g, "\n\n").trim();
   return text;
@@ -204,6 +204,24 @@ async function makeCover(coverSrc, coversDir, outStem, dry) {
   return publicPath;
 }
 
+async function importInlineFigures(body, source, coversDir, outStem, dry) {
+  const pattern = /!\[([^\]]*)\]\(([^)\s]+)\)/g;
+  const found = [];
+  let m;
+  while ((m = pattern.exec(body)) !== null) found.push(m[2]);
+  let result = body;
+  for (const ref of found) {
+    if (/^(https?:)?\/\//i.test(ref) || ref.startsWith("/")) continue;
+    const figSrc = path.join(path.dirname(source), ref);
+    if (!fs.existsSync(figSrc)) fail("inline figure not found: " + figSrc);
+    const figStem = outStem + "-" + path.basename(ref).replace(/\.[^.]+$/, "");
+    const publicPath = await makeCover(figSrc, coversDir, figStem, dry);
+    if (!publicPath) fail("sharp is required to import inline figure " + figSrc);
+    result = result.split("](" + ref + ")").join("](" + publicPath + ")");
+  }
+  return result;
+}
+
 async function main() {
   const args = parseArgs(process.argv);
   const source = args.source;
@@ -225,15 +243,16 @@ async function main() {
   const date = (args.date && args.date !== true) ? args.date : inferDate(type, parsed.data, token);
   const slug = (args.slug && args.slug !== true) ? args.slug : slugFromName(token);
   const topics = topicsRaw.split(",").map(function (t) { return t.trim(); }).filter(Boolean);
-  const body = cleanBody(parsed.body);
-
   if (!title) fail("could not infer a title; pass --title");
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) fail("could not infer a valid date; pass --date YYYY-MM-DD (got: " + date + ")");
   if (!slug) fail("could not infer a slug; pass --slug");
-  if (!body) fail("empty body after cleaning; check the source file");
 
   const outDir = (args.out && args.out !== true) ? args.out : path.join("src", "writing", "posts");
   const outStem = date + "-" + slug;
+  const coversDir = path.join("src", "writing", "covers");
+  const body = cleanBody(await importInlineFigures(parsed.body, source, coversDir, outStem, args.dry));
+  if (!body) fail("empty body after cleaning; check the source file");
+
   const outName = outStem + ".md";
   const outPath = path.join(outDir, outName);
 
@@ -243,7 +262,6 @@ async function main() {
     if (args.cover && args.cover !== true) coverSrc = args.cover;
     else if (type === "articulo") coverSrc = findCover(source);
   }
-  const coversDir = path.join("src", "writing", "covers");
   let coverPublic = null;
   if (coverSrc) {
     if (!fs.existsSync(coverSrc)) fail("cover not found: " + coverSrc);
