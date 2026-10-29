@@ -9,7 +9,6 @@ const topics = [
   { slug: "ciudad",   label: "Vivienda, ciudad e infraestructura" },
   { slug: "ciencia",  label: "Ciencia, medio ambiente y educación" },
   { slug: "justicia", label: "Justicia, derechos e instituciones" },
-  { slug: "politica", label: "Política y partidos" },
 ];
 
 const labelOf = {};

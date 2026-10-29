@@ -91,7 +91,7 @@ built as an **Eleventy collection** tagged `escrito`. One Markdown file per piec
 under `src/writing/posts/`, front matter `title / date / type / topics[] / medium?`.
 Bodies are Felipe's words verbatim; nothing here is invented.
 
-- `src/_data/tax.js` — single source of truth for the **9-topic taxonomy** (slug +
+- `src/_data/tax.js` — single source of truth for the **8-topic taxonomy** (slug +
   label) and the type labels (`carta` / `columna` / `articulo`). Add a topic here
   and it becomes a filter chip automatically.
 - `src/writing/index.njk` — renders every piece as a card with `data-type` /
