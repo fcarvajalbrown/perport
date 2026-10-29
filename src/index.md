@@ -28,7 +28,7 @@ hreflangEn: /en/
     </a>
     <a class="editorial-card" href="/works/">
         <h2>Obras</h2>
-        <p>Otras cosas que he hecho.</p>
+        <p>Libros e investigación.</p>
         <span class="editorial-card-go">Ver &rarr;</span>
     </a>
 </section>

@@ -65,11 +65,11 @@ The four pages (nav order Home / Writing / Portfolio / Works):
 - `/` — Home/About landing (editorial: serif-italic headline, warm accent `#d9a55c`).
 - `/writing/` — writing archive (stub for now; content model is a separate, not-yet-written spec).
 - `/portfolio/` — the GitHub repo grid + modal (Inter sans-serif, amber `#f59e0b`), rendered server-side at build from `src/_data/repos.js`.
-- `/works/` — stub for now (content design is a separate, not-yet-written spec).
+- `/works/` — Obras: books and research as CSS flip-card book covers (hover or tap flips; `src/works.js` toggles `is-flipped` for touch). Entries live in `src/_data/works.js`; add a work there, not in the template.
 
 The source tree:
 - `src/_includes/layout.njk` — shared `<head>`, top nav, footer; renders each page into `{{ content | safe }}`.
-- `src/index.md`, `src/works/index.md` — editorial pages (Markdown + inline HTML).
+- `src/index.md` — editorial home page (Markdown + inline HTML); `src/works/index.njk` — the Obras shelves.
 - `src/writing/index.njk` — the Escritos archive: a filterable list of every piece in the `escrito` collection (see "The Escritos section" below).
 - `src/portfolio/index.html` — the repo grid + hero + modal, all rendered server-side at build from the `repos` data (see "How the portfolio data flows"). `src/en/portfolio/index.html` is the English mirror.
 - `src/_data/repos.js` — build-time GitHub fetch that feeds the portfolio (`repos.profile`, `repos.repos`).

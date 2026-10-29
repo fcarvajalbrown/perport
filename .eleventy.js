@@ -47,6 +47,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
   eleventyConfig.addPassthroughCopy({ "src/script.js": "script.js" });
   eleventyConfig.addPassthroughCopy({ "src/escritos.js": "escritos.js" });
+  eleventyConfig.addPassthroughCopy({ "src/works.js": "works.js" });
   eleventyConfig.addPassthroughCopy("src/writing/covers");
   eleventyConfig.addPassthroughCopy({ "src/avatar.webp": "avatar.webp" });
   eleventyConfig.addPassthroughCopy({ "src/refresh.php": "refresh.php" });

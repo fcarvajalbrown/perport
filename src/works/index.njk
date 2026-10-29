@@ -1,13 +1,39 @@
 ---
 layout: layout.njk
 title: Obras
-description: "Trabajo creativo de Felipe Carvajal Brown más allá del código. Un espacio en construcción, próximamente."
+description: "Libros e investigación de Felipe Carvajal Brown: sistemas multiagente con LLM, simulación numérica y un libro de dibujos."
 lang: es
 bodyClass: page-editorial
 altUrl: /en/
 ---
 <div class="editorial-body">
     <p class="editorial-eyebrow">Obras</p>
-    <h1 class="editorial-title">Otras cosas que he <em>hecho</em>.</h1>
-    <p class="editorial-lede">Un espacio para trabajo creativo más allá del código. Próximamente.</p>
+    <h1 class="editorial-title">Libros e <em>investigación</em>.</h1>
+    <p class="editorial-lede">Dos libros y cuatro trabajos de investigación, de los sistemas multiagente con LLM a la simulación numérica. Pasa el cursor o toca una portada para ver su ficha.</p>
+
+    {% for shelf in works.shelves %}
+    <h2 class="works-heading">{{ shelf.heading }}</h2>
+    <ul class="works-shelf">
+        {% for w in shelf.items %}
+        <li class="work-card">
+            <div class="work-inner">
+                <div class="work-face work-front" style="--cover: {{ w.cover }}">
+                    <span class="work-cover-kind">{{ w.kind }}</span>
+                    <span class="work-cover-title">{{ w.title }}</span>
+                    <span class="work-cover-author">{{ w.authors }}</span>
+                </div>
+                <div class="work-face work-back">
+                    <span class="work-back-kind">{{ w.kind }} · {{ w.year }}</span>
+                    <span class="work-back-title">{{ w.title }}</span>
+                    <span class="work-back-line">{{ w.authors }}</span>
+                    <span class="work-back-line">{{ w.language }}</span>
+                    {% if w.note %}<span class="work-back-line">{{ w.note }}</span>{% endif %}
+                    {% if w.doi %}<a class="work-back-link" href="https://doi.org/{{ w.doi }}" target="_blank" rel="noopener">DOI {{ w.doi }}</a>{% endif %}
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
 </div>
+<script src="/works.js" defer></script>
