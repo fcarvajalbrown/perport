@@ -1,0 +1,120 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
+    <title>La suplantación que nadie notó · Felipe Carvajal Brown</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Felipe Carvajal Brown">
+    <meta property="og:title" content="La suplantación que nadie notó · Felipe Carvajal Brown">
+    
+    <meta property="og:url" content="https://fcarvajalbrown.com/writing/la-suplantacion-que-nadie-noto/">
+    <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Felipe Carvajal Brown">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="La suplantación que nadie notó · Felipe Carvajal Brown">
+    
+    <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
+    <link rel="canonical" href="https://fcarvajalbrown.com/writing/la-suplantacion-que-nadie-noto/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
+    <link rel="stylesheet" href="/styles.css?v=4cc6b435">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="page-editorial">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/" aria-label="Inicio, Felipe Carvajal Brown">
+                <picture>
+                    <source srcset="/logo-nav.webp?v=bee9b98d" type="image/webp">
+                    <img src="/logo-nav.png?v=934a7fd9" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/">Inicio</a></li>
+                
+                <li><a href="/writing/">Escritos</a></li>
+                
+                <li><a href="/portfolio/">Portafolio</a></li>
+                
+                <li><a href="/works/">Obras</a></li>
+                
+                <li><a class="site-nav-lang" href="/" title="View in English">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <img class="escrito-cover" src="/writing/covers/2026-07-28-la-suplantacion-que-nadie-noto.webp" alt="" width="1200" height="675" />
+    <p class="escrito-eyebrow">Artículo</p>
+    <h1 class="escrito-title">La suplantación que nadie notó</h1>
+    <p class="escrito-date"><time datetime="2026-07-28">28 de julio de 2026</time></p>
+    
+    <ul class="escrito-topics">
+        <li class="topic-chip">Software e ingeniería</li><li class="topic-chip">GovTech, datos y transparencia</li>
+    </ul>
+    
+    <div class="escrito-body">
+        <p>Estaba depurando RadarCL cuando lo encontré. No buscaba suplantación: buscaba por qué la herramienta marcaba como inválidas direcciones que claramente existían. En ese proceso leí con cuidado qué decían los servidores cuando contestaban, y noté que el HELO de cada prueba SMTP decía <code>verify.cl</code>. Busqué el dominio. Registro A en <code>54.88.168.60</code>, nameservers de AWS, dueño que no soy yo.</p>
+<p>Cada bloqueo que RadarCL se ganó, cada reclamo que un servidor de correo levantó, llegó a la casilla de ese tercero.</p>
+<p><strong>Eso no es un error de lógica. Es hacerse pasar por alguien sin pedirle permiso.</strong></p>
+<h2>Lo que el servidor ve</h2>
+<p>Cuando RadarCL llega a un servidor de correo, el servidor hace tres preguntas antes de decidir si le habla: quién eres, de dónde vienes, qué quieres. Las dos primeras se responden en el HELO y el MAIL FROM. RadarCL respondía &quot;soy verify.cl&quot; y &quot;vengo de check@verify.cl&quot;.</p>
+<p>Si el servidor contestaba con un <code>550 5.7.606</code>, que es el código de Microsoft Exchange para &quot;IP bloqueada&quot;, RadarCL lo leía como &quot;la dirección no existe&quot; y la marcaba INVÁLIDA. <strong>Pero ese 550 no habla de la dirección: habla de RadarCL.</strong> El servidor rechazó al que llamó a la puerta, no al destinatario del que se preguntó si existía.</p>
+<p>El dueño de verify.cl acumula la reputación negativa de los bloqueos que yo me gané. No hay arreglo retroactivo para eso.</p>
+<h2>El error debajo del error</h2>
+<p>El problema de identidad no apareció solo. Mientras lo investigaba encontré cinco lugares más donde RadarCL leía una respuesta de servidor como evidencia de algo distinto de lo que describía.</p>
+<p>El RFC 3463 define seis categorías de código extendido de respuesta SMTP. Las dos primeras, &quot;addressing&quot; y &quot;mailbox&quot;, hablan del destinatario. Las otras cuatro hablan del sistema remoto, de la ruta, del protocolo, de la política. <strong>RadarCL trataba los seis como si todos hablaran del destinatario.</strong> Un buzón lleno, código <code>X.2.2</code>, quedaba marcado INVÁLIDO, aunque estar lleno prueba que el buzón existe. Un dominio que publicaba un null MX, la manera que tiene el RFC 7505 de decirte con todas sus letras &quot;no acepto correo&quot;, quedaba DESCONOCIDO en vez de INVÁLIDO. Respuestas de greylisting, servidores que te piden que vuelvas más tarde porque están ocupados, eran indistinguibles de fallas definitivas.</p>
+<p>La confusión era la misma en seis lugares: leer una respuesta como evidencia sobre su tema cuando hablaba de otra cosa.</p>
+<h2>La corrección</h2>
+<p>Postfix hace exactamente lo que hace RadarCL: sondea servidores SMTP para verificar si una dirección existe antes de aceptar un mensaje entrante. Se presenta con el nombre del equipo donde corre y usa el remitente nulo, la convención de la RFC 5321 para sondas que nunca van a enviar nada.</p>
+<p>RadarCL hace lo mismo desde la versión 0.5.5. Se presenta con el FQDN del equipo que corre el escaneo. Quien tenga un dominio propio con PTR que calce puede sobreescribir eso con la variable de entorno <code>RADARCL_HELO</code>. <strong>No es un sistema complejo: es dejar de mentir sobre quién llama a la puerta.</strong></p>
+<h2>Un principio, seis correcciones</h2>
+<p>Lo que une los seis errores es lo mismo: <strong>una respuesta solo es evidencia de lo que describe.</strong> Un servidor que te rechaza a ti no te dice nada sobre el destinatario. Una consulta DNS que no contesta no te dice que el dominio no tiene correo. Un buzón lleno no te dice que el buzón no existe.</p>
+<p>Ese principio, una vez escrito, es obvio. Antes de escribirlo lo estaba violando en seis lugares al mismo tiempo.</p>
+<p>La v0.5.5 salió con las seis correcciones: clasificación de respuestas 5xx por RFC 3463, null MX como INVÁLIDO definitivo, identidad honesta en el HELO, y dos estados nuevos.</p>
+<p>El primero es para greylisting: un 4xx con patrón de reintento lleva ahora una marca y el motivo escrito. La dirección sigue siendo DESCONOCIDA, porque todavía no se sabe nada, pero queda señalizada para una segunda pasada con el subcomando <code>verify</code>. El 421, carga del servidor, queda excluido a propósito: reintentar rápido a un servidor saturado es exactamente cómo una demora se vuelve un bloqueo.</p>
+<p>El segundo estado es &quot;acepta todo&quot;. Un servidor que responde 250 a cualquier destinatario no está confirmando que el buzón exista: está aceptando a quien llegue. RadarCL detecta eso con dos sondas de veinte caracteres aleatorios sobre la misma conexión ya abierta, una vez por dominio, no una por dirección, porque aceptar todo es una propiedad del servidor, no del buzón. Esas direcciones quedan fuera del CSV, igual que los desconocidos. En veinte dominios .cl reales: el 17% acepta todo.</p>
+<h2>Construir herramientas honestas</h2>
+<p>Hay una forma de tocar infraestructura ajena sin pagar el precio: atribuirle a otro lo que haces. Eso hacía RadarCL sin que yo lo supiera. No era malicia. Era descuido. Para el dueño de verify.cl, el resultado es el mismo.</p>
+<p>Una herramienta que toca servidores de correo ajenos tiene que decir quién es. No por una razón legal abstracta, sino porque el trabajo depende de eso: <strong>toda la información que te da un servidor que no sabe con quién habla es evidencia envenenada desde la raíz.</strong></p>
+<p>En Chile las herramientas de civic-tech y OSINT son escasas. La confianza que les queda no se gana suplantando: se gana diciendo el nombre.</p>
+
+    </div>
+</article>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago de Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>

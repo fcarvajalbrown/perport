@@ -1,0 +1,108 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="gz9Ch9zv4F21oDC752tLdFi5xOLODKk96ejAeiem11w">
+    <title>ChileCompra presume transparencia. Los datos que importan siguen vacíos. · Felipe Carvajal Brown</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Felipe Carvajal Brown">
+    <meta property="og:title" content="ChileCompra presume transparencia. Los datos que importan siguen vacíos. · Felipe Carvajal Brown">
+    
+    <meta property="og:url" content="https://fcarvajalbrown.com/writing/api-chilecompra-licitaciones/">
+    <meta property="og:image" content="https://fcarvajalbrown.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Felipe Carvajal Brown">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ChileCompra presume transparencia. Los datos que importan siguen vacíos. · Felipe Carvajal Brown">
+    
+    <meta name="twitter:image" content="https://fcarvajalbrown.com/og-image.png">
+    <link rel="canonical" href="https://fcarvajalbrown.com/writing/api-chilecompra-licitaciones/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4cb27146">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=14e0e1f0">
+    <link rel="stylesheet" href="/styles.css?v=4cc6b435">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body class="page-editorial">
+    <nav class="site-nav">
+        <div class="site-nav-inner">
+            <a class="site-nav-brand" href="/" aria-label="Inicio, Felipe Carvajal Brown">
+                <picture>
+                    <source srcset="/logo-nav.webp?v=bee9b98d" type="image/webp">
+                    <img src="/logo-nav.png?v=934a7fd9" alt="" class="site-nav-logo" width="29" height="32" />
+                </picture>
+                <span class="site-nav-name">Felipe Carvajal Brown</span>
+            </a>
+            <button class="site-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="site-nav-links">
+                
+                <li><a href="/">Inicio</a></li>
+                
+                <li><a href="/writing/">Escritos</a></li>
+                
+                <li><a href="/portfolio/">Portafolio</a></li>
+                
+                <li><a href="/works/">Obras</a></li>
+                
+                <li><a class="site-nav-lang" href="/" title="View in English">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="escrito">
+    <a class="escrito-back" href="/writing/">&larr; Volver a Escritos</a>
+    <img class="escrito-cover" src="/writing/covers/2026-10-22-api-chilecompra-licitaciones.webp" alt="" width="1200" height="675" />
+    <p class="escrito-eyebrow">Artículo</p>
+    <h1 class="escrito-title">ChileCompra presume transparencia. Los datos que importan siguen vacíos.</h1>
+    <p class="escrito-date"><time datetime="2026-10-22">22 de octubre de 2026</time></p>
+    
+    <ul class="escrito-topics">
+        <li class="topic-chip">GovTech, datos y transparencia</li>
+    </ul>
+    
+    <div class="escrito-body">
+        <p>Hoy a las 22:59 le pedí a la API oficial de Mercado Público el listado de licitaciones adjudicadas en Chile. Devolvió 360. Filtré las de municipios: 137. De esas, 32 se adjudicaron a un solo oferente. Uno de cada cuatro.</p>
+<p>No es una encuesta ni un rumor de pasillo. <strong>Es la respuesta literal, en vivo, de la plataforma que el Estado chileno exhibe como ejemplo internacional de transparencia y datos abiertos en compras públicas.</strong> La bajé yo mismo, con mi propio ticket de API, hace unas horas.</p>
+<h2>El truco viejo murió. El que sigue vivo no se mira.</h2>
+<p>Hasta 2022, el patrón clásico para blindar una licitación era simple: abrirla por menos de cuatro días hábiles, para que casi nadie llegara a postular a tiempo. La Ley 21.634, que modernizó las compras públicas en diciembre de 2023, parece haber apretado ese tornillo. En mi muestra de hoy, de 137 licitaciones municipales, solo 3 tuvieron ventana corta.</p>
+<p>Corrí una simulación de Monte Carlo con 10.000 iteraciones sobre esos mismos datos, cruzando oferente único con ventana corta. El resultado es honesto, no espectacular: el cruce no fue estadísticamente significativo, la muestra es chica. <strong>Pero el oferente único no necesitó la ventana corta para seguir en el 23% de las licitaciones municipales de hoy.</strong> El truco cambió de forma. Nadie lo está mirando con el mismo cuidado.</p>
+<h2>El Estado ya escribió dónde está el hueco</h2>
+<p>Esto no es una sospecha mía. Open Contracting Partnership, que mantiene el espejo internacional de los datos de ChileCompra, documentó que la API dice actualizarse en tiempo real pero en la práctica se refresca cada seis meses, que hay 74.931 contratos registrados contra 4,9 millones de adjudicaciones, y que los campos de transacciones e hitos están vacíos.</p>
+<p>Entre diciembre de 2025 y febrero de 2026, ChileCompra hizo su propia consulta pública sobre el futuro de sus APIs. Recibió 35 respuestas. El 94% de los que contestaron ya usa las APIs todos los días. Y encontraron, con sus propias palabras, brechas de cobertura justo en tratos directos, compra ágil y convenios marco. <strong>Es decir: el propio organismo que administra los datos reconoció que el hueco está exactamente donde se esconden las compras sin competencia real.</strong></p>
+<h2>No es incapacidad. Es que a nadie le urge</h2>
+<p>El estudio de la UC y la USACH (Martín Ordóñez y Pablo Carvacho, mayo 2025) revisó 345 municipios entre 2015 y 2022: 2.858 auditorías de Contraloría con más de 33.500 faltas graves, y 72.000 licitaciones adjudicadas a un solo oferente. Chile, mientras tanto, lleva desde 2018 recibiendo reconocimiento internacional por publicar esos mismos datos en estándar abierto.</p>
+<p>Las dos cosas son ciertas a la vez, y eso es el punto. <strong>Publicar datos abiertos y que esos datos sirvan para auditar lo que de verdad importa no es lo mismo, y Chile celebra lo primero mientras lo segundo sigue roto donde más duele.</strong> No es que falte capacidad técnica para arreglarlo. Es que a nadie con poder de decisión le urge que esos datos se puedan cruzar fácil.</p>
+<p>Yo ya crucé algunos. Hay un proveedor de salud primaria que se repite en trato directo en cinco comunas distintas, siempre con el mismo paquete de licencias y el mismo camino administrativo. A los que ya saben de qué hablo, no hace falta que diga el nombre. Al resto le queda la tarea: la API está ahí, parcialmente, esperando que alguien más la lea.</p>
+
+    </div>
+</article>
+
+
+    <footer class="site-footer">
+        <p>Felipe Carvajal Brown · Santiago de Chile</p>
+    </footer>
+
+    <script>
+        (function () {
+            var toggle = document.querySelector('.site-nav-toggle');
+            var links = document.querySelector('.site-nav-links');
+            if (!toggle || !links) return;
+            toggle.addEventListener('click', function () {
+                var open = links.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        })();
+    </script>
+</body>
+</html>
