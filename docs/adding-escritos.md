@@ -47,6 +47,10 @@ says go) deploy per the "Deploying to Hostinger" section of the root `CLAUDE.md`
   optimizes it to webp (1200px wide, ~20KB) at `src/writing/covers/<date>-<slug>.webp`,
   and adds `cover:` to the front matter. Pass `--cover <path>` to point elsewhere,
   or `--no-cover` to skip. Needs `sharp` (already a dependency).
+- **Inline figures (artículos):** every `![alt](file.png)` that points to a file
+  next to the source is optimized to webp at
+  `src/writing/covers/<date>-<slug>-<file>.webp` and the image link is rewritten
+  to that path. Image links are never flattened.
 
 The one thing the script does NOT decide is **topics** — that is the editorial
 call, so `--topics` is required.
@@ -72,7 +76,7 @@ first `articulo` is imported).
 - Cartas al director: `~/Desktop/felipe_skill_voice/cartas/sent/<mes>/<fecha>_<slug>.md`
 - Columnas: `~/Desktop/felipe_skill_voice/columnas/` (prefer the `_plain.md`; if
   only a `_CIPER.md` exists, the script flattens its links)
-- LinkedIn artículos: `~/Desktop/linkedin-articles/linkedin/<fecha>_<slug>/articulo.md`
+- LinkedIn artículos: `~/Desktop/felipe_skill_voice/linkedin/<fecha>_<slug>/articulo.md` (with `cover.png` and any inline figures next to it)
 
 ## Preview before writing
 
