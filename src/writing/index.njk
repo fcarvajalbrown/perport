@@ -21,7 +21,7 @@ altUrl: /en/
         <div class="filter-group filter-types" role="group" aria-label="Filtrar por tipo">
             <button class="chip chip-type is-active" data-type="all" type="button">Todas</button>
             {% for key, t in tax.tipos %}
-            {% if collections.escrito | hasType(key) %}
+            {% if key != "comunicado" and collections.escrito | hasType(key) %}
             <button class="chip chip-type" data-type="{{ key }}" type="button">{{ t.plural }}</button>
             {% endif %}
             {% endfor %}
@@ -31,6 +31,7 @@ altUrl: /en/
 
     <ul class="escritos-list" id="escritos-list">
         {% for e in collections.escrito | reverse %}
+        {% if e.data.type != "comunicado" %}
         <li class="escrito-card" data-type="{{ e.data.type }}" data-topics="{{ e.data.topics | join(' ') }}">
             <a class="escrito-card-link" href="{{ e.url }}">
                 {% if e.data.cover %}<img class="escrito-card-cover" src="{{ e.data.cover }}" alt="" loading="lazy" width="1200" height="675" />{% endif %}
@@ -42,6 +43,7 @@ altUrl: /en/
                 </span>
             </a>
         </li>
+        {% endif %}
         {% endfor %}
     </ul>
     <p class="escritos-empty" id="escritos-empty" hidden>No hay escritos con esa combinación. Prueba con otro tema o tipo.</p>

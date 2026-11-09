@@ -15,9 +15,10 @@ const labelOf = {};
 topics.forEach(function (t) { labelOf[t.slug] = t.label; });
 
 const tipos = {
-  carta:    { singular: "Carta al director", plural: "Cartas" },
-  columna:  { singular: "Columna",           plural: "Columnas" },
-  articulo: { singular: "Artículo",          plural: "Artículos" },
+  carta:      { singular: "Carta al director",  plural: "Cartas" },
+  columna:    { singular: "Columna",            plural: "Columnas" },
+  articulo:   { singular: "Artículo",           plural: "Artículos" },
+  comunicado: { singular: "Comunicado interno", plural: "Comunicados" },
 };
 
 module.exports = { topics: topics, labelOf: labelOf, tipos: tipos };

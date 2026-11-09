@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /*
  * import-escrito.js — turn one source writing file (carta al director, columna,
- * or LinkedIn artículo) into an Escritos collection file under src/writing/posts/.
+ * LinkedIn artículo, or internal PS comunicado) into an Escritos collection
+ * file under src/writing/posts/.
  *
  * It does the mechanical part of the import that is easy to get wrong by hand:
  *   - pulls the title and date from the source (front matter or filename),
@@ -22,12 +23,13 @@
  *
  * Flags:
  *   --source <path>     (required) the source .md file
- *   --type <t>          (required) carta | columna | articulo
+ *   --type <t>          (required) carta | columna | articulo | comunicado
  *   --topics <a,b>      (required) comma-separated topic slugs from tax.js
  *   --title "<t>"       (optional) override the inferred title
  *   --date <YYYY-MM-DD> (optional) override the inferred date
  *   --slug <slug>       (optional) override the inferred URL slug
- *   --medium "<m>"      (optional) where it ran (only if actually published)
+ *   --medium "<m>"      (optional) where it ran (only if actually published);
+ *                       for comunicado, defaults to the source's `para:` field
  *   --cover <path>      (optional) cover image; for articulos, auto-detected
  *                       from the source folder (cover.png) if not given
  *   --no-cover          (optional) skip the cover even if one is present
@@ -39,6 +41,16 @@
  * to src/writing/covers/<date>-<slug>.webp; the front matter gets `cover:` with
  * the public path. sharp is optional: without it, cartas/columnas import fine
  * and an articulo just imports without its cover.
+ *
+ * comunicado is a different genre: an internal PS party memo (to a comisión,
+ * the comunal, or the directiva nacional), never sent to a media outlet. It
+ * keeps its "## Referencias" block (cartas/columnas/artículos don't have one),
+ * its signature is "Militante, PS Comunal Ñuñoa" (no RUT/phone to strip), and
+ * every comunicado is unconditionally written with `tag: personal` and
+ * `noindex: true` — these are Felipe's personal opinion shared with an
+ * internal party body, not an official position, and the page stays reachable
+ * only by direct link (excluded from the /writing/ archive list, its filter
+ * chips, and sitemap.xml; not indexed by search engines).
  */
 
 const fs = require("fs");
@@ -122,7 +134,7 @@ function firstH1(body) {
   return m ? m[1].trim() : null;
 }
 
-function cleanBody(body) {
+function cleanBody(body, type) {
   let lines = body.split(/\r?\n/);
   // Drop the email subject-suggestion line(s).
   lines = lines.filter(function (l) { return !/^Asunto sugerido/i.test(l.trim()); });
@@ -141,12 +153,27 @@ function cleanBody(body) {
     return /^@\S/.test(t) || /^#[^\s#]/.test(t);
   });
   if (scaffoldIdx !== -1) lines = lines.slice(0, scaffoldIdx);
-  // Cut the signature block: everything from the "Felipe Carvajal Brown" line on.
   const sigIdx = lines.findIndex(function (l) { return /^Felipe Carvajal Brown\s*$/.test(l.trim()); });
-  if (sigIdx !== -1) lines = lines.slice(0, sigIdx);
+  if (sigIdx !== -1) {
+    if (type === "comunicado") {
+      // Comunicados keep what follows the signature (the Referencias block):
+      // drop only the "Felipe Carvajal Brown" + "Militante, ..." lines.
+      let end = sigIdx + 1;
+      while (end < lines.length && lines[end].trim() === "") end++;
+      if (end < lines.length && /^Militante,/.test(lines[end].trim())) end++;
+      lines = lines.slice(0, sigIdx).concat(lines.slice(end));
+    } else {
+      // Cut the signature block: everything from the "Felipe Carvajal Brown" line on.
+      lines = lines.slice(0, sigIdx);
+    }
+  }
   let text = lines.join("\n");
   // Flatten markdown links [texto](url) -> texto.
   text = text.replace(/(?<!!)\[([^\]]+)\]\([^)]+\)/g, "$1");
+  // Give each numbered reference its own paragraph (source lines run back to
+  // back with no blank line between them, which markdown would otherwise
+  // merge into a single wall-of-text paragraph).
+  text = text.replace(/\n(\[\d+\])/g, "\n\n$1");
   // Collapse 3+ blank lines and trim.
   text = text.replace(/\n{3,}/g, "\n\n").trim();
   return text;
@@ -163,6 +190,11 @@ function inferTitle(type, data, body) {
   }
   // columna
   return (firstH1(body) || "").trim();
+}
+
+function inferMedium(type, data) {
+  if (type === "comunicado" && data.para) return data.para;
+  return null;
 }
 
 function inferDate(type, data, token) {
@@ -229,8 +261,8 @@ async function main() {
   const topicsRaw = args.topics;
 
   if (!source) fail("missing --source");
-  if (!type || ["carta", "columna", "articulo"].indexOf(type) === -1) {
-    fail("--type must be one of: carta | columna | articulo");
+  if (!type || ["carta", "columna", "articulo", "comunicado"].indexOf(type) === -1) {
+    fail("--type must be one of: carta | columna | articulo | comunicado");
   }
   if (!topicsRaw || topicsRaw === true) fail("missing --topics (comma-separated slugs from src/_data/tax.js)");
   if (!fs.existsSync(source)) fail("source file not found: " + source);
@@ -242,6 +274,7 @@ async function main() {
   const title = (args.title && args.title !== true) ? args.title : inferTitle(type, parsed.data, parsed.body);
   const date = (args.date && args.date !== true) ? args.date : inferDate(type, parsed.data, token);
   const slug = (args.slug && args.slug !== true) ? args.slug : slugFromName(token);
+  const medium = (args.medium && args.medium !== true) ? args.medium : inferMedium(type, parsed.data);
   const topics = topicsRaw.split(",").map(function (t) { return t.trim(); }).filter(Boolean);
   if (!title) fail("could not infer a title; pass --title");
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) fail("could not infer a valid date; pass --date YYYY-MM-DD (got: " + date + ")");
@@ -250,7 +283,7 @@ async function main() {
   const outDir = (args.out && args.out !== true) ? args.out : path.join("src", "writing", "posts");
   const outStem = date + "-" + slug;
   const coversDir = path.join("src", "writing", "covers");
-  const body = cleanBody(await importInlineFigures(parsed.body, source, coversDir, outStem, args.dry));
+  const body = cleanBody(await importInlineFigures(parsed.body, source, coversDir, outStem, args.dry), type);
   if (!body) fail("empty body after cleaning; check the source file");
 
   const outName = outStem + ".md";
@@ -273,8 +306,12 @@ async function main() {
   fm += "date: " + date + "\n";
   fm += "type: " + type + "\n";
   fm += "topics: [" + topics.join(", ") + "]\n";
-  if (args.medium && args.medium !== true) fm += "medium: " + yamlString(args.medium) + "\n";
+  if (medium) fm += "medium: " + yamlString(medium) + "\n";
   if (coverPublic) fm += "cover: " + coverPublic + "\n";
+  if (type === "comunicado") {
+    fm += "tag: personal\n";
+    fm += "noindex: true\n";
+  }
   fm += "---\n\n";
   const out = fm + body + "\n";
 
