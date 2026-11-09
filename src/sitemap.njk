@@ -8,6 +8,9 @@ eleventyExcludeFromCollections: true
 {%- if item.outputPath and item.outputPath.endsWith(".html") %}
   <url>
     <loc>https://fcarvajalbrown.com{{ item.url }}</loc>
+{%- if item.data.type %}
+    <lastmod>{{ item.date | isoDate }}</lastmod>
+{%- endif %}
   </url>
 {%- endif %}
 {%- endfor %}
