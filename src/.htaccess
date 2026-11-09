@@ -22,3 +22,7 @@
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
 </IfModule>
+
+<IfModule mod_alias.c>
+    RedirectMatch 410 ^/writing/(ley-reconstruccion-ppd-termometro|peru-fujimori-democracia-coherencia|brexit-populismo-sin-programa|cuatro-de-julio-socialista|synco-y-mi-alcalde|partido-radical-escuela-de-la-camara|cuarenta-personas-un-sabado|lo-que-no-sale-en-la-portada|indice-taco-otan|once-principios-maquina-estado|cuota-entrada-cuota-salida)/?$
+</IfModule>
