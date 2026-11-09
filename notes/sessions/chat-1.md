@@ -9,6 +9,7 @@
 
 ## Flags
 - Open: in Search Console, resubmit the sitemap and click Validate fix on the 404 row. Felipe does this by hand.
-- Open: commits 06bb79f to 310960a are pushed to GitHub but not deployed to Hostinger. Deploying publishes two cartas and two noindex comunicados.
+- Closed: commits 06bb79f to b6a6355 deployed to Hostinger. New pieces answer 200; the comunicado is absent from the sitemap.
+- Finding: Google recrawls a submitted sitemap on its own; resubmit only after big changes or a fetch error.
 - Open: `git stash list` still holds `wip-comunicado-before-sitemap-fix`; its content is now committed, so it can be dropped.
 - Note: build with `pnpm run build`; npm is blocked on this machine. Delete any `pnpm-lock.yaml` it creates, the repo tracks `package-lock.json`.
