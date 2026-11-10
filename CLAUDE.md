@@ -54,7 +54,7 @@ This is non-negotiable and overrides momentum on any other task. If you are abou
 - **No AI muletillas / vocabulary tells:** "delve", "leverage", "seamless/sin fisuras", "robust/robusto", "multifaceted", "it's worth noting", "in today's ... landscape", "the seam between", "the words that hold them together", negation-parallelism ("not just X, it's Y") used as a crutch, and the Spanish equivalents in the global CLAUDE.md checklist.
 - **Vary sentence length and rhythm.** No uniform, symmetrical, over-polished cadence.
 
-The full checklist lives in the global `~/.claude/CLAUDE.md` ("AI-tell checklist" and "Final pass" sections) and applies here in full. When in doubt, invoke the article-humanizer / voz-de-felipe skills. Shipping AI-tell copy to the live site is a failure of this project's most basic standard — do not do it.
+The full checklist lives in the `felipe-outward-writing` skill and applies here in full. Shipping AI-tell copy to the live site is a failure of this project's most basic standard — do not do it.
 
 ## What this is
 
